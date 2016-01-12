@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Sudoku
+
+  Created by slee on 2016/1/1.
+  Copyright © 2016年 slee. All rights reserved.
+*/
+
+CFBundleDisplayName = "數獨";
+CFBundleName = "數獨";

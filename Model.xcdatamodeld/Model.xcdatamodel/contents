@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
+    <entity name="Sudoku_card" representedClassName=".Sudoku_card" syncable="YES">
+        <attribute name="editable" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="num" attributeType="Integer 16" minValueString="1" maxValueString="9" defaultValueString="1" syncable="YES"/>
+        <attribute name="pos" attributeType="Integer 16" minValueString="0" maxValueString="89" syncable="YES"/>
+        <relationship name="table" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sudoku_table" inverseName="card" inverseEntity="Sudoku_table" syncable="YES"/>
+    </entity>
+    <entity name="Sudoku_table" representedClassName=".Sudoku_table" syncable="YES">
+        <attribute name="table" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="card" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Sudoku_card" inverseName="table" inverseEntity="Sudoku_card" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Sudoku_card" positionX="-45" positionY="0" width="128" height="105"/>
+        <element name="Sudoku_table" positionX="241" positionY="9" width="128" height="75"/>
+    </elements>
+</model>

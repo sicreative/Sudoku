@@ -1,0 +1,111 @@
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "5"; */
+"5.title" = "Bring All to Front";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "19"; */
+"19.title" = "Window";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "24"; */
+"24.title" = "Window";
+
+/* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
+"29.title" = "AMainMenu";
+
+/* Class = "NSMenuItem"; title = "sudoku"; ObjectID = "56"; */
+"56.title" = "sudoku";
+
+/* Class = "NSMenu"; title = "sudoku"; ObjectID = "57"; */
+"57.title" = "sudoku";
+
+/* Class = "NSMenuItem"; title = "About sudoku"; ObjectID = "58"; */
+"58.title" = "About sudoku";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "129"; */
+"129.title" = "Preferences…";
+
+/* Class = "NSMenu"; title = "Services"; ObjectID = "130"; */
+"130.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "131"; */
+"131.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Hide sudoku"; ObjectID = "134"; */
+"134.title" = "Hide sudoku";
+
+/* Class = "NSMenuItem"; title = "Quit sudoku"; ObjectID = "136"; */
+"136.title" = "Quit sudoku";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "145"; */
+"145.title" = "Hide Others";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "150"; */
+"150.title" = "Show All";
+
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "239"; */
+"239.title" = "Zoom";
+
+/* Class = "NSWindow"; title = "sudoku"; ObjectID = "371"; */
+"371.title" = "sudoku";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "490"; */
+"490.title" = "Help";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "491"; */
+"491.title" = "Help";
+
+/* Class = "NSMenuItem"; title = "Tim Help"; ObjectID = "492"; */
+"492.title" = "Tim Help";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "537"; */
+"537.title" = "Minimize";
+
+/* Class = "NSMenu"; title = "Level"; ObjectID = "CoV-4E-aAE"; */
+"CoV-4E-aAE.title" = "Level";
+
+/* Class = "NSMenuItem"; title = "Level"; ObjectID = "DuT-i1-kOC"; */
+"DuT-i1-kOC.title" = "Level";
+
+/* Class = "NSMenuItem"; title = "Very Easy"; ObjectID = "LAo-iv-5Ed"; */
+"LAo-iv-5Ed.title" = "Very Easy";
+
+/* Class = "NSMenuItem"; title = "Check"; ObjectID = "Lif-8b-VPG"; */
+"Lif-8b-VPG.title" = "Check";
+
+/* Class = "NSMenuItem"; title = "Easy"; ObjectID = "LpP-UH-XH1"; */
+"LpP-UH-XH1.title" = "Easy";
+
+/* Class = "NSMenuItem"; title = "New"; ObjectID = "T2b-Rz-2da"; */
+"T2b-Rz-2da.title" = "New";
+
+/* Class = "NSMenu"; title = "Check"; ObjectID = "X9N-Ht-a0U"; */
+"X9N-Ht-a0U.title" = "Check";
+
+/* Class = "NSMenuItem"; title = "Show Hint"; ObjectID = "Znc-l9-hxP"; */
+"Znc-l9-hxP.title" = "Show Hint";
+
+/* Class = "NSMenuItem"; title = "Medium"; ObjectID = "fkj-jN-G1M"; */
+"fkj-jN-G1M.title" = "Medium";
+
+/* Class = "NSMenu"; title = "Auto"; ObjectID = "i6j-aV-l8t"; */
+"i6j-aV-l8t.title" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "mlz-2c-Je8"; */
+"mlz-2c-Je8.title" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "mmg-n9-MDS"; */
+"mmg-n9-MDS.title" = "Check Correct";
+
+/* Class = "NSMenuItem"; title = "New"; ObjectID = "n1g-9v-6ed"; */
+"n1g-9v-6ed.title" = "New";
+
+/* Class = "NSMenuItem"; title = "Hard"; ObjectID = "qRs-tR-dQ8"; */
+"qRs-tR-dQ8.title" = "Hard";
+
+/* Class = "NSMenu"; title = "New"; ObjectID = "u7q-Y0-DYQ"; */
+"u7q-Y0-DYQ.title" = "New";
+
+/* Class = "NSMenuItem"; title = "Very Hard"; ObjectID = "wZ2-QP-Hjq"; */
+"wZ2-QP-Hjq.title" = "Very Hard";
+
+/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "yvK-HQ-PiB"; */
+"yvK-HQ-PiB.title" = "Check Correct";
