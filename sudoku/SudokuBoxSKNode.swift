@@ -11,7 +11,12 @@ import SpriteKit
 
 class SudokuBoxSKNode: SKNode {
     
- 
+ let noneditColor = SKColor.blackColor()
+ let editCorrectColor = NSColor(red:0.3,green:0.45,blue:0.24,alpha:1)
+ let editInCorrectColor = SKColor.blueColor()
+ let strokeColor  = SKColor.redColor()
+ var correctChangeColor = false;
+    
   
     
    
@@ -38,9 +43,12 @@ class SudokuBoxSKNode: SKNode {
     func setNumValue (num:Int,_ edit:Bool){
         self.setNumValue(num, edit,true)
     }
+
+     func setNumValue (num:Int,_ edit:Bool,_ updatehint:Bool){
+        self.setNumValue(num, edit,updatehint,0)
+    }
     
-    
-    func setNumValue (num:Int,_ edit:Bool,_ updatehint:Bool){
+    func setNumValue (num:Int,_ edit:Bool,_ updatehint:Bool,_ fillednum: Int){
         
          let lablenode = self.children[0].children[0] as! SKLabelNode
         
@@ -50,19 +58,25 @@ class SudokuBoxSKNode: SKNode {
             userData!["showhint"] = false
         }
         
+        userData!["fillednum"] = 0
         
         if (!edit) {
-            lablenode.fontColor = SKColor.blackColor()
+            lablenode.fontColor = noneditColor
             if (num != 0){
                 lablenode.text = String ( num )
             }
         }
         else{
-            lablenode.fontColor = SKColor.blueColor()
+            lablenode.fontColor = editInCorrectColor
             if (Runtime.isDebug()){
-                if (num != 0){
+                if (fillednum == 0){
+                    
                     lablenode.text = ""
                   //  lablenode.text = String ( num )
+                }else{
+                      userData!["fillednum"] = fillednum
+                    lablenode.text = String (fillednum)
+                   
                 }
             }
             
@@ -71,7 +85,10 @@ class SudokuBoxSKNode: SKNode {
         if (updatehint){
             self.updatehint()
         }
+        
+        checkcorrect()
     }
+    
     
     
 
@@ -101,13 +118,13 @@ class SudokuBoxSKNode: SKNode {
         
         /*
         if (!edit) {
-            lablenode.fontColor = SKColor.blackColor()
+            lablenode.fontColor = noneditColor
             if (num != 0){
              lablenode.text = String ( num )
             }
             }
         else{
-            lablenode.fontColor = SKColor.blueColor()
+            lablenode.fontColor = editInCorrectColor
             if (Runtime.isDebug()){
                 if (num != 0){
                     lablenode.text = String ( num )
@@ -124,7 +141,7 @@ class SudokuBoxSKNode: SKNode {
         shapenode.name = "1"
         shapenode.path = drawpath;
         shapenode.strokeColor = SKColor .redColor()
-       // shapenode.fillColor = SKColor.blackColor()
+       // shapenode.fillColor = noneditColor
         shapenode.lineWidth = 10
         shapenode.lineJoin = CGLineJoin.Round
         
@@ -158,7 +175,7 @@ class SudokuBoxSKNode: SKNode {
         let node  = self.children[0]
         if node is SKShapeNode {
         let shapenode = node as! SKShapeNode
-            if shapenode.strokeColor == SKColor.blackColor(){
+            if shapenode.strokeColor == noneditColor{
                 return
             }
         
@@ -168,14 +185,14 @@ class SudokuBoxSKNode: SKNode {
                 let sbnode = scene!.children[selectedbox as! Int] as! SudokuBoxSKNode
                 
                 let insidenode = sbnode.children[0] as! SKShapeNode
-                    insidenode.strokeColor = SKColor.redColor()
+                    insidenode.strokeColor = strokeColor
                     
                 }
                 
                     
                 
                 
-                    shapenode.strokeColor = SKColor.blackColor()
+                    shapenode.strokeColor = noneditColor
                     scene!.userData!["selectedbox"] = userData!["id"]
             }
         }
@@ -188,6 +205,8 @@ class SudokuBoxSKNode: SKNode {
                 return false
             }
             
+            userData!["fillednum"] = num
+            
             let node = self.children[0].children[0] as! SKLabelNode
             // var fillingarray = scene!.userData?["fillingarray"] as! [[Int]]
             //let x = (userData!["id"] as! Int - 9) / 9
@@ -199,11 +218,13 @@ class SudokuBoxSKNode: SKNode {
             
               node.text = String (num)
             
-            node.fontColor = SKColor.blueColor()
+          //  node.fontColor = editInCorrectColor
         
           //  (scene! as! GameScene).updatehint()
             
-           
+            //if performance["auto_check"] as! Bool {
+               checkcorrect()
+            //}
       
             
             return true
@@ -211,10 +232,10 @@ class SudokuBoxSKNode: SKNode {
         return false
     }
     
-    func checkcorrect(){
+    func checkcorrect()->Bool{
         
         if !isEditable() {
-            return
+            return false
         }
        let node = self.children[0].children[0] as! SKLabelNode
        // let num =  Int (node.text!)
@@ -226,18 +247,44 @@ class SudokuBoxSKNode: SKNode {
 
         
         if (isCorrect()) {
-          
-            node.fontColor = NSColor(red:0.3,green:0.45,blue:0.24,alpha:1)
-        }else{
-            node.fontColor = SKColor.blueColor()
+            if (correctChangeColor){
+            node.fontColor = editCorrectColor
+            }
+            return true
         }
         
+        node.fontColor = editInCorrectColor
+            return false
+        
+        
     }
+    
+    
+    func correctChangeColor(isChange: Bool){
+        if (!isEditable()){
+             correctChangeColor = false
+            return
+        }
+        
+        if (isChange){
+            correctChangeColor = true
+            checkcorrect()
+            return
+        }
+        
+        correctChangeColor = false
+        let node = self.children[0].children[0] as! SKLabelNode
+         node.fontColor = editInCorrectColor
+        
+    }
+    
+    
+
     
     func setSelected(){
         
         let insidenode = self.children[0] as! SKShapeNode
-        insidenode.strokeColor = SKColor.blackColor()
+        insidenode.strokeColor = noneditColor
         
     
     }
@@ -245,7 +292,7 @@ class SudokuBoxSKNode: SKNode {
     func setDeselected(){
         
         let insidenode = self.children[0] as! SKShapeNode
-        insidenode.strokeColor = SKColor.redColor()
+        insidenode.strokeColor = strokeColor
         
         
     }

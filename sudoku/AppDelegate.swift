@@ -145,8 +145,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.writeperformance("selectedgamelevel",menuselectedlevel)
         (skView!.scene as! GameScene).performance["selectedgamelevel"] = menuselectedlevel
         
+        (self.skView!.scene as! GameScene).levelresettoperformance()
+
         if (isNewGame){
-        (self.skView!.scene as! GameScene).newsudoku();
+                 (self.skView!.scene as! GameScene ).newsudoku();
         }
         
     }
@@ -175,6 +177,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         (self.skView!.scene as! GameScene ).showhint(sender)
         
     }
+    
+    
+
     
     
     func levelchangeSheetDisplay(){
@@ -285,7 +290,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             performance["auto_hint"] = preferencessetup("auto_hint", false) as! Bool
             performance["auto_check"] = preferencessetup("auto_check", false) as! Bool
             
-        
+            
             
             
             
@@ -300,6 +305,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             scene.performance = performance
 
         
+            scene.levelresettoperformance()
+
 
           //  scene.size = CGSize(width:800.0,height:600.0);
             
@@ -353,7 +360,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+        
         return true
+    }
+    
+    func applicationWillTerminate(notification: NSNotification) {
+        (self.skView.scene! as! GameScene).savecurrenttable()
+        
     }
     
     @IBAction func changeLevelNewGameButton(sender: NSButtonCell) {
@@ -367,6 +380,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func changeLevelnextgamebutton(sender: NSButtonCell) {
         changeLevelSheet.sheetParent!.endSheet(changeLevelSheet)
         LevelChange(false)
+    }
+    
+    @IBAction func undo (sender: NSButtonCell){
+        
+    }
+    
+    @IBAction func redo (sender: NSButtonCell){
+        
     }
     
     

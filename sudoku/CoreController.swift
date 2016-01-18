@@ -39,7 +39,7 @@ class CoreController: NSObject {
     
 
             
-            let storeURL = appcacheURL.URLByAppendingPathComponent( "SudokuModel.sqlite")
+            let storeURL = appcacheURL.URLByAppendingPathComponent( "Cache.db")
       
             
             

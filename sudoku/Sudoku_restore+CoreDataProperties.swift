@@ -1,8 +1,8 @@
 //
-//  Sudoku_table+CoreDataProperties.swift
+//  Sudoku_restore+CoreDataProperties.swift
 //  Sudoku
 //
-//  Created by slee on 2016/1/8.
+//  Created by slee on 2016/1/17.
 //  Copyright © 2016年 slee. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -12,10 +12,11 @@
 import Foundation
 import CoreData
 
-extension Sudoku_table {
+extension Sudoku_restore {
 
-    @NSManaged var table: NSDate?
-    @NSManaged var card: NSSet?
-    @NSManaged var level: NSNumber?
+    @NSManaged var editable: NSNumber?
+    @NSManaged var num: NSNumber?
+    @NSManaged var pos: NSNumber?
+    @NSManaged var fillednum: NSNumber?
 
 }

@@ -119,6 +119,23 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Edit" id="NdH-0Z-cjr">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Edit" id="VwV-Gx-Ruu">
+                        <items>
+                            <menuItem title="Undo" keyEquivalent="z" id="aVv-kd-F9b">
+                                <connections>
+                                    <action selector="undo:" target="-1" id="OEI-Y9-psl"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Redo" keyEquivalent="Z" id="Rv7-yQ-f0w">
+                                <connections>
+                                    <action selector="redo:" target="-1" id="y7i-Vm-sTB"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Check" id="Lif-8b-VPG">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Check" id="X9N-Ht-a0U">

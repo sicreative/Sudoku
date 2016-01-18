@@ -6,12 +6,20 @@
         <attribute name="pos" attributeType="Integer 16" minValueString="0" maxValueString="89" syncable="YES"/>
         <relationship name="table" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sudoku_table" inverseName="card" inverseEntity="Sudoku_table" syncable="YES"/>
     </entity>
+    <entity name="Sudoku_restore" representedClassName=".Sudoku_restore" syncable="YES">
+        <attribute name="editable" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="fillednum" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="num" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="pos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="Sudoku_table" representedClassName=".Sudoku_table" syncable="YES">
+        <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="card" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Sudoku_card" inverseName="table" inverseEntity="Sudoku_card" syncable="YES"/>
     </entity>
     <elements>
         <element name="Sudoku_card" positionX="-45" positionY="0" width="128" height="105"/>
-        <element name="Sudoku_table" positionX="241" positionY="9" width="128" height="75"/>
+        <element name="Sudoku_table" positionX="241" positionY="9" width="128" height="90"/>
+        <element name="Sudoku_restore" positionX="99" positionY="36" width="128" height="105"/>
     </elements>
 </model>

@@ -11,9 +11,34 @@ import SpriteKit
 import GameKit
 
 
+
+
+
+
 class GameScene: SKScene {
     
     
+   
+    
+    private let concurrencySudokuQueue = dispatch_queue_create(
+        NSBundle.mainBundle().bundleIdentifier!+".SudokuQueue", DISPATCH_QUEUE_CONCURRENT)
+    
+    private let concurrencySudokuBackGroundQueue = dispatch_queue_create(NSBundle.mainBundle().bundleIdentifier!+".SudokuBackGroundQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, 0))
+    
+  //  private var dispatch_source_finished_buildsudoku : dispatch_source_t!
+    
+    
+
+    
+    
+    
+    
+
+    
+
+    private var level: Int = 0;
+    private var numfilledBox: Int = 0;
+    private var numTotalfillBox: Int = 0;
 
    
     var performance = [String:AnyObject]()
@@ -23,159 +48,20 @@ class GameScene: SKScene {
     
     let modelcontroller =  CoreController()
 
+    // MARK: - Level
     
-   
-
-    override func keyDown(theEvent: NSEvent) {
-        // if (!userData["editable"]){
-        //  return
-        //      }
-        
-        
-        
-        
-        
-        if (userData!["selectedbox"] as! Int == -1){
-            return
-        }
-        
-
-        
-        
-        let node = children[userData!["selectedbox"] as! Int ] as! SudokuBoxSKNode
-        
-        
-        if (!node.changetext(theEvent)){
-        
-        interpretKeyEvents([theEvent])
-        }
-        
-        if performance["auto_check"] as! Bool {
-        node.checkcorrect()
-        }
-        
-        updatehint()
-        
+    
+    func levelresettoperformance(){
+        level = peformanceleveltolevel(performance["selectedgamelevel"] as! Int)
     }
     
-    override func moveUp(sender: AnyObject?) {
-        
-        let selectedbox = userData!["selectedbox"] as! Int
-        if ( selectedbox == -1){
-            return
-        }
-        
-        if (selectedbox  == 9){
-            return
-        }
-        
-        var minus:Int = 1
-        while (!((children[selectedbox - minus] as! SudokuBoxSKNode).isEditable())){
-            minus += 1
-            if ((selectedbox - minus) <= 8){
-              
-                  return
-            }
-        }
-        
-        userData!["selectedbox"] = selectedbox - minus
-        
-        updateselectedbox(selectedbox)
-        
-        
-        
-    }
-    
-    override func moveDown(sender: AnyObject?) {
-        
-        let selectedbox = userData!["selectedbox"] as! Int
-        if ( selectedbox == -1){
-            return
-        }
-        
-        if (selectedbox == 89){
-            return
-        }
-        
-        var add:Int = 1
-        while (!((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())){
-            add += 1
-            if (add+selectedbox >=  90){
-                return
-            }
-        }
-
-        
-        
-        userData!["selectedbox"] = selectedbox + add
-        
-        updateselectedbox(selectedbox)
-        
-    }
-    
-    override func moveLeft(sender: AnyObject?) {
-        
-        let selectedbox = userData!["selectedbox"] as! Int
-      
-        
-        //if (selectedbox  < 18){
-            //return
-        //}
-        
-        
-        var minus:Int = 0
-        
-       repeat {
-            minus += 9
-            if (selectedbox - minus < 9){
-                minus -= 82 }
-        
-            if (selectedbox - minus >= 90){
-                return
-            }
-
-                 //return
-            }while !((children[selectedbox - minus] as! SudokuBoxSKNode).isEditable())
-        
-        
-        
-        userData!["selectedbox"] = selectedbox - minus
-        
-        updateselectedbox(selectedbox)
-        
-    }
-    
-    override func moveRight(sender: AnyObject?) {
-        
-        let selectedbox = userData!["selectedbox"] as! Int
-        if ( selectedbox == -1){
-            return
-        }
-        
-       // if (selectedbox >= 81){
-       //     return
-       // }
-        
-        var add:Int = 0
-        repeat{
-            add += 9
-           
-            
-            if (add+selectedbox >= 90){
-                add -= 82
-            }
-            if (add+selectedbox <= 8){
-            return
-            }
-        }while !((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())
-        
-        userData!["selectedbox"] = selectedbox + add
-        
-        updateselectedbox(selectedbox)
-        
+    func peformanceleveltolevel(PerformaceLevel: Int)-> Int{
+        return 3 + (PerformaceLevel) * 10
     }
     
     
+    
+    // MARK: - New
     
     
     func newsudoku(){
@@ -190,295 +76,166 @@ class GameScene: SKScene {
         }
         
        // let level = 3
-        makeanswer()
-         var  fillingarray :[[Bool]] = makefilling ();
+      //  makeanswer()
+      //   makefilling ();
+        
+      //  buildsudokutable();
+        
+        let isReadfromdatabase = readdatabasetable();
+        if (!isReadfromdatabase){
+            buildsudokutable(false)
+            return;
+        }
+            newsudokubuildednum()
+        
+        
+        
+     
+        
+    }
+    
+    func newsudokubuildednum(){
         var  numarray :[[Int]] = userData!["numarray"] as! Array
+        var  fillingarray :[[Bool]] = userData!["fillingarray"] as! Array
+        numTotalfillBox = 0;
+        numfilledBox = 0;
         
         for var i=0; i < 9 ; ++i {
             
             for var j=0; j < 9; ++j{
-        (children[9+i*9+j] as! SudokuBoxSKNode).setNumValue(numarray[i][j], fillingarray[i][j],false)
+                if (fillingarray[i][j]){
+                    ++numTotalfillBox
+                }
+                
+                
+                (children[9+i*9+j] as! SudokuBoxSKNode).setNumValue(numarray[i][j], fillingarray[i][j],false)
             }
         }
-        
-        self.updatehint()
-        
+        updateAllAutoCheck()
+        refreshHint()
+      //  self.updatehint()
     }
-    
-    
     
     func changemixedstatenextgame(mixedstatemenu: NSMenuItem){
         userData!["mixedstatemenu"] = mixedstatemenu
     }
 
+    // MARK: - Support Undo / Redo
+ 
+    func windowWillReturnUndoManager(window: NSWindow) -> NSUndoManager? {
+        return modelcontroller.managedObjectContext.undoManager
+    }
+    
+    
+    // MARK: - Build Sudoku number
 
     
-    override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        
-        
-
-        userData = ["selectedbox":  -1]
-        //userData!["allcheckcorrect"] = false
-        //userData!["showhint"] = false
-     
-        
-        
-      //  userData!["showhint"] = false
-       // var numarray: [[Int]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
-        
-      makeanswer ()
-        
-        
-        
-    //  let level = 3 + (performance["selectedgamelevel"] as! Int) * 3
-       var  fillingarray :[[Bool]] = makefilling ();
-        
-        
-        
-        
-        var  numarray :[[Int]] = userData!["numarray"] as! Array
-       // numarray = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
-        
-      //  var  fillingarray :[[Int]] = userData!["fillingarray"] as! Array
-
-        
-        databasemodeltable(numarray,fillingarray)
-        
-        
-        let offset :CGFloat = 10
-        let groupgap :CGFloat = 15
-
-        let maxX :CGFloat = self.frame.maxX
-        let maxY  :CGFloat =  self.frame.maxY
-        let minX  :CGFloat =  self.frame.minX
-        let minY  :CGFloat = self.frame.minY
-        let stepX  :CGFloat =  (maxX-minX-offset*2-groupgap*2)/9
-        let stepY  :CGFloat =  (maxY-minY-offset*2*0.75-groupgap*2)/9
-        
-        
-        for var i=0; i < 3 ; ++i {
-            
-            for var j=0; j < 3; ++j{
-   
-                
-                let gapoffsetx = offset + groupgap * CGFloat (i)
-                let gapoffsety = 0.75 * offset + groupgap * CGFloat(j)
-                
-              //  let rect = CGRectMake(gapoffsetx + (CGFloat (i) * stepX), self.frame.maxY - gapoffsety - ( CGFloat (j) * stepY + stepY), stepX, stepY)
-            
-            let bigrect = CGRectMake(gapoffsetx + (CGFloat (i*3) * stepX),  self.frame.maxY - gapoffsety - ( CGFloat (j*3) * stepY )-stepY*3, stepX*3, stepY*3)
-            let drawpath = CGPathCreateWithRoundedRect(bigrect, offset, offset, nil)
-            let bigshapenode = SKShapeNode(path: drawpath)
-            bigshapenode.fillColor = SKColor.grayColor()
-            self.addChild(bigshapenode)
-            
-                }
-            
-        }
-
-        
-        
-        
-        for var i=0; i < 9 ; ++i {
-            
-            for var j=0; j < 9; ++j{
-                
- 
-        
-        
-       // let drawpath = CGPathCreateWithRect(drawrect, nil)
-        
- 
-        
-        //CGPathDrawingMode.Fill
-     
-     
-        
-        
     
+    func buildsudokutable (isRunBackGround : Bool){
+        return buildsudokutable(isRunBackGround,self.level)
+    }
+    
+    
+    
+    
+    func buildsudokutable (isRunBackGround : Bool, _ level : Int){
+        
+        var  numarray :[[Int]] = [[]]
+        var  fillingarray :[[Bool]] = [[]]
+        
+
+        
       
+        let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
+        
+        let buildConcurrencyGroup = dispatch_group_create()
+     
+        dispatch_async(runqueue){
+            dispatch_group_enter(buildConcurrencyGroup)
+               numarray = self.makeanswer()
+            
+            dispatch_group_leave(buildConcurrencyGroup)
+            
+
        
-       // CGPathCreateWithRect(<#T##rect: CGRect##CGRect#>, nil)
-      //  CGPathMoveToPoint(drawpath,nil,-100,-100);
-      //  CGPathAddLineToPoint(drawpath,nil,100,-100);
-      //  CGPathAddLineToPoint(drawpath,nil,100,100);
-      //  CGPathAddLineToPoint(drawpath,nil,-100,100);
-        //CGPathAddLineToPoint(drawpath,nil,-100,-100);
-        
-       let shapenode = SudokuBoxSKNode()
-        
-        let gapoffsetx = offset + CGFloat(i / 3) * groupgap
-        let gapoffsety = 0.75 * offset + CGFloat(j / 3) * groupgap
-                
-        let rect = CGRectMake(gapoffsetx + (CGFloat (i) * stepX), self.frame.maxY - gapoffsety - ( CGFloat (j) * stepY + stepY), stepX, stepY)
-                
-           
-         
-                
-                shapenode.BuildupBox(rect,numarray[i][j],9+i*9+j,fillingarray[i][j])
-      //      shapenode.name = "1"
-      //      shapenode.path = drawpath;
-      //  shapenode.strokeColor = SKColor .redColor()
-      //  shapenode.fillColor = SKColor.blackColor()
-      //  shapenode.lineWidth = 10
-      //  shapenode.lineJoin = CGLineJoin.Round
-        
-        
-       // shapenode.position = CGPointMake(CGRectGetMidX(rect),CGRectGetMidY(rect))
-        
-       // let action = SKAction.moveByX(100.0, y: 100.0, duration: 10.0)
-       //shapenode.runAction(SKAction.repeatActionForever(action))
-       // shapenode.runAction(action)
-       
-                
-                
-                
-         self.addChild(shapenode)
-                
             }
-        }
-        
-       //  shapenode.position = CGPointMake(800,600)
         
         
-        
-      
-            
-            
-      
-            
-            if (Runtime.isDebug()){
-                print ( "select all input check  @ GameScene" + String (performance["auto_check"]) )
+        dispatch_async(runqueue){
+                dispatch_group_enter(buildConcurrencyGroup)
+               fillingarray = self.makefilling ();
+                dispatch_group_leave(buildConcurrencyGroup)
             }
             
-            
-            
+        
+        dispatch_async(runqueue){
+                    
+                                dispatch_group_notify(buildConcurrencyGroup, self.concurrencySudokuQueue){
+                                    
+                                    dispatch_barrier_async(runqueue){
       
-        
-        
-         self.setAllShowhint(performance["auto_hint"] as! Bool)
-        self.updatehint()
-        
- 
-        
-      
-    }
-    
-    
-    func databasemodeltable(numarray : [[Int]],_ filledarray:[[Bool]])->Sudoku_table{
-        
-        
-        
-      
-        
-        
-        
-       
-        
-        
-        
-    
-        let sudoku_table : Sudoku_table =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_table", inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_table
-        
-       
-        sudoku_table.table = NSDate()
-        
-        var pos = 0;
-        
-        for i in 0...8{
-            for j in 0...8{
-                let sudoku_card : Sudoku_card =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_card",    inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_card
-        
-                sudoku_card.num = numarray[i][j] as NSNumber
-                sudoku_card.editable = filledarray[i][j] as NSNumber
-                sudoku_card.pos = pos++ as NSNumber
-    
-                sudoku_table.mutableSetValueForKey("card").addObject(sudoku_card)
+                                     //   let  numarray :[[Int]] = self.userData!["numarray"] as! Array
+                                     //   let  fillingarray :[[Bool]] = self.userData!["fillingarray"] as! Array
+                                   
+                                    self.databasemodeltable(numarray,fillingarray,level)
+                                        if (!isRunBackGround){
+                                            self.userData!["numarray"] = numarray
+                                            self.userData!["fillingarray"] = fillingarray
+                                                self.newsudokubuildednum()
+                                        
+                                        }
+                                        
+                                        
+                                        if (Runtime.isDebug()){
+                                            
+                                            
+                                            print ( "Finished run build sudoku level: \(level) ,background: \(isRunBackGround)")
+                                        }
+                                    //    dispatch_source_merge_data(self.dispatch_source_finished_buildsudoku, 1)
+                    }
             }
-        }
         
-        
-        
-       // sudoku_table.table = NSDate()
-        
-       
-        
-        //sudoku_table.mutableSetValueForKey("card").addObject(sudoku_card)
-        
-        
-        
-        
-
-        
-  /*
-        
-        let sudoku_tableFetch = NSFetchRequest(entityName: "Sudoku_table")
-        
-        do {
-            let fetchedSudoku_table = try modelcontroller.managedObjectContext.executeFetchRequest(sudoku_tableFetch) as! [Sudoku_table]
-           fetchedSudoku_table.endIndex
-        } catch {
-            fatalError("Failed to fetch employees: \(error)")
-        }
-        
-
-       
-        
-       let sudoku_cardFetch = NSFetchRequest(entityName: "Sudoku_card")
-   
-      
-        do {
-            var fetchedSudoku_card = try modelcontroller.managedObjectContext.executeFetchRequest(sudoku_cardFetch) as! [Sudoku_card]
-            var sudoku_card = Sudoku_card();
-            sudoku_card.card = 1;
             
-            
+        }
+        
+        
+        
       
-        } catch {
-            fatalError("Failed to fetch employees: \(error)")
-        }
+       //  makefilling ();
         
-        
-        */
+    //    var  fillingarray :[[Bool]] = makefilling ();
         
         
         
-        do {
-            try self.modelcontroller.managedObjectContext.save()
-        } catch {
-            fatalError("Failure to save context: \(error)")
-        }
+        
+   //     var  numarray :[[Int]] = userData!["numarray"] as! Array
+        
+   //     databasemodeltable(numarray,fillingarray)
 
+    }
+    
+    
+    func buildsudokutable (isRunBackGround : Bool, _ level : Int,_ delay : Double){
         
-        return sudoku_table
+        if (delay <= 0){
+            return buildsudokutable(isRunBackGround,level)
+        }
+        
+         let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
+        
+        let int_time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
+        dispatch_after(int_time, runqueue){
+            return self.buildsudokutable(isRunBackGround,level)
+        }
         
     }
     
     
     
-    override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
-        
-    }
     
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-        
-  
-        
-        
-    }
     
-    func updateselectedbox(previous: Int){
-        (children[previous] as! SudokuBoxSKNode).setDeselected()
-    (children[userData!["selectedbox"] as! Int] as! SudokuBoxSKNode).setSelected()
-        
-        
-    }
     
-    private func makeanswer(){
+    private func makeanswer()->[[Int]]{
         var buildtrycount = 0
         var lastcount = 0
         
@@ -486,80 +243,80 @@ class GameScene: SKScene {
         
         var step : Int = 0
         
-         repeat {
+        repeat {
             start: switch step {
-        case (0):
-            
-        while (!makeanswerfirst (&numarray)){
-            if Runtime.isDebug() {buildtrycount++}
-           
+            case (0):
+                
+                while (!makeanswerfirst (&numarray)){
+                    if Runtime.isDebug() {buildtrycount++}
+                    
                 }
-        ++step
-      
-        case (1):
-        
-        
-        while (!makeanswersecond(&numarray)){
-             if Runtime.isDebug() {buildtrycount++}
-            }
-        ++step
-        
-            
-            
-        case (2):
-            out: while (!makeanswerthird(&numarray)){
-            if Runtime.isDebug() {
-                if Runtime.isDebug() {buildtrycount++}
-                ++lastcount
-        
+                ++step
+                
+            case (1):
+                
+                
+                while (!makeanswersecond(&numarray)){
+                    if Runtime.isDebug() {buildtrycount++}
+                }
+                ++step
+                
+                
+                
+            case (2):
+                out: while (!makeanswerthird(&numarray)){
+                    if Runtime.isDebug() {
+                        if Runtime.isDebug() {buildtrycount++}
+                        ++lastcount
+                        
                         
                         step = lastcount%4 == 0 ? 0 : 1
-                
-                if (step == 0){
-                        numarray = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
-                }else if (step == 1){
-                        for var i = 3;i<6;i++ {
-                            for var j = 0;j<3;j++ {
-                                numarray[i][j] = 0
+                        
+                        if (step == 0){
+                            numarray = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+                        }else if (step == 1){
+                            for var i = 3;i<6;i++ {
+                                for var j = 0;j<3;j++ {
+                                    numarray[i][j] = 0
+                                }
+                            }
+                            for var i = 3;i<6;i++ {
+                                for var j = 6;j<9;j++ {
+                                    numarray[i][j] = 0
+                                }
                             }
                         }
-                        for var i = 3;i<6;i++ {
-                            for var j = 6;j<9;j++ {
-                                numarray[i][j] = 0
-                            }
-                        }
-                    }
-        
+                        
                         break start
                         
-                
-                                 }
+                        
+                    }
                 }
-    
-        ++step
-            
-        default:
-            break
-
+                
+                ++step
+                
+            default:
+                break
+                
             }
             
             
         }while ( step<3 )
         
-          userData!["numarray"] = numarray
-        
-        
-        
-        
+        //userData!["numarray"] = numarray
         if (Runtime.isDebug()){print("Try " + String ( buildtrycount ) + " times for build the Sudoku")}
-    }
 
+        
+        return numarray
+        
+    }
+    
     
     private func makeanswerfirst(inout numarray: [[Int]])->Bool{
         
         
         
-       // numarray = userData!["answerarray"] as! [[Int64]]
+        // numarray = userData!["answerarray"] as! [[Int64]]
         
         var seq = [1,2,3,4,5,6,7,8,9]
         var shuffledcenter = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
@@ -570,7 +327,7 @@ class GameScene: SKScene {
                 numarray[j][i] =  shuffledcenter[next++] as! Int
             }
         }
-         var shuffled = shuffledcenter
+        var shuffled = shuffledcenter
         var shuffleddown = shuffledcenter
         var shuffledmid = shuffledcenter
         shuffled.removeRange(0...2)
@@ -582,7 +339,7 @@ class GameScene: SKScene {
         shuffledmid = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(shuffledmid)
         
         
-         next=0
+        next=0
         numarray[0][3] = shuffled[next++] as! Int
         numarray[1][3] = shuffled[next++] as! Int
         numarray[2][3] = shuffled[next++] as! Int
@@ -592,15 +349,15 @@ class GameScene: SKScene {
         
         next=0
         for (var i=0;i<3;i++){
-        
+            
             var j = 0;
             while (numarray[0][3] == shuffledmid[j] as! Int || numarray[1][3] == shuffledmid[j] as! Int || numarray[2][3] == shuffledmid[j]as! Int ){
-              
+                
                 if (shuffledmid.count-1 < ++j) {return false}
-                }
-                  numarray[i][4]=shuffledmid[j] as! Int
-                shuffledmid.removeAtIndex(j)
-     
+            }
+            numarray[i][4]=shuffledmid[j] as! Int
+            shuffledmid.removeAtIndex(j)
+            
             if (shuffledmid.count == 0) {return false}
             
         }
@@ -615,17 +372,17 @@ class GameScene: SKScene {
             }
             numarray[i][4]=shuffledmid[j] as! Int
             shuffledmid.removeAtIndex(j)
-          //  if (shuffledmid.count == 0) {return false}
+            //  if (shuffledmid.count == 0) {return false}
             
         }
         
-   
-   //      shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
+        
+        //      shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
         
         for (var i=0;i<6;i++){
             let index = seq.indexOf(numarray[i][3])
             if (index != nil){
-                    seq.removeAtIndex(index!)
+                seq.removeAtIndex(index!)
             }
             
             
@@ -643,7 +400,7 @@ class GameScene: SKScene {
                     
                 }
             }
-         numarray[i+6][3] = check
+            numarray[i+6][3] = check
             
             
         }
@@ -662,7 +419,7 @@ class GameScene: SKScene {
         
         shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
         
-  
+        
         
         for (var i=0;i<3;i++){
             
@@ -682,12 +439,12 @@ class GameScene: SKScene {
         
         
         
-
-
         
         
         
-      
+        
+        
+        
         return true
     }
     
@@ -762,7 +519,7 @@ class GameScene: SKScene {
             
         }
         
-      
+        
         shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
         
         
@@ -816,9 +573,9 @@ class GameScene: SKScene {
     }
     
     
-   
     
-
+    
+    
     
     
     private func makeanswerthird(inout numarray: [[Int]])->Bool{
@@ -837,73 +594,73 @@ class GameScene: SKScene {
         
         
         
-      //  let array = [(2,2),(6,2)]
+        //  let array = [(2,2),(6,2)]
         
-  
-       var trydisplaycount = 0
+        
+        var trydisplaycount = 0
         
         var repeatcount = 0
         
         var max = 0
         var maxcount = 0
         
-      
         
-    
+        
+        
         
         start: for var i=0;i<array.count; {
             
-   
+            
             
             
             if ( !minuswithnum(&numarray, array[i][0],array[i][1])){
                 
-             
-                        ++trydisplaycount
+                
+                ++trydisplaycount
                 
                 var shuffleseq: [Int] = []
                 for i in 1...35 {
                     shuffleseq.append(i)
                 }
                 
-
                 
-                           if (++repeatcount % 5 == 0){
-                                        --i
-                               if i>max {
-                                max = i
-                                maxcount = 0
-                               
-                               }else{
-                                ++maxcount
-                                i -= maxcount
-                            }
-                            
-                            if (i < 0 || repeatcount % 120 == 0){
-                                i = 0
-                                
-                                //shuffle array
-                             
-                                
-                                let shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(shuffleseq)
-                                
-                                //shuffle 10 set
-                                for i in 0...9{
-                                    let tmp = array[shuffled[i*2] as! Int]
-                                    array[shuffled[i*2] as! Int] = array[shuffled[i*2+1] as! Int]
-                                    array[shuffled[i*2+1] as! Int] = tmp
-                                }
-                               
-                                
-                                
-                            }
-                            if (repeatcount >= 600){
-                                maxcount = 0
-                                
-                                //break start
-                                        return false
-                            }
+                
+                if (++repeatcount % 5 == 0){
+                    --i
+                    if i>max {
+                        max = i
+                        maxcount = 0
+                        
+                    }else{
+                        ++maxcount
+                        i -= maxcount
+                    }
+                    
+                    if (i < 0 || repeatcount % 120 == 0){
+                        i = 0
+                        
+                        //shuffle array
+                        
+                        
+                        let shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(shuffleseq)
+                        
+                        //shuffle 10 set
+                        for i in 0...9{
+                            let tmp = array[shuffled[i*2] as! Int]
+                            array[shuffled[i*2] as! Int] = array[shuffled[i*2+1] as! Int]
+                            array[shuffled[i*2+1] as! Int] = tmp
                         }
+                        
+                        
+                        
+                    }
+                    if (repeatcount >= 600){
+                        maxcount = 0
+                        
+                        //break start
+                        return false
+                    }
+                }
                 
             }else{
                 ++i
@@ -913,22 +670,146 @@ class GameScene: SKScene {
             
         }
         
-  
-       if (Runtime.isDebug()){
-           print ( "Try " + String(trydisplaycount) + " for outer Sudoku")
+        
+        if (Runtime.isDebug()){
+            print ( "Try " + String(trydisplaycount) + " for outer Sudoku")
         }
-       
         
         
+        
+        
+        
+        
+        return true
+    }
+    
+    
+
+    
+    func makefilling()->[[Bool]]{
+       return makefilling(self.level)
+    }
+    
+
+    
+    
+    func makefilling(level: Int)->[[Bool]] {
+        
+        
+        
+        
+        // var  numarray :[[Int]] = userData!["numarray"] as! Array
+        
+        // build array for filling information (User input)
+        
+        
+        
+        var fillingarray : [[Bool]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:false))
+        
+        // Dismiss
+        var numofdismiss = level + 20
+        
+        // Add random +/-3 pcs
+        
+        numofdismiss += rand() % 6 - 3
+        
+        if (numofdismiss > 70){
+            numofdismiss = 70
+        }
+        
+        
+        
+        //Loop for every 3x3 section and randomly skip one
+        
+        var section : Int = 4
+     
+     
+        
+        srandom (UInt32(NSDate().timeIntervalSinceReferenceDate))
+        var sectionvac : [Int] = Array(count:9,repeatedValue:0)
+        var max = 0
+        
+        for _ in 0...numofdismiss {
+            
+            
+            
+            
+            
+            var trycounter = 0;
+            while (true) {
+                var tempsection = 0
+                repeat{
+                tempsection = random() % 9
+                }while (tempsection == section || sectionvac[tempsection]>=9)
+            
+            if (max < sectionvac[tempsection]-1 || trycounter > 3) {
+                    section = tempsection
+                break;
+            }
+            
+            ++trycounter
+                
+                
+            }
+            
+            ++sectionvac[section]
+            
+            if sectionvac[section] > max {
+                max = sectionvac[section]
+            }
+
+            
+            let sx : Int = section / 3 * 3
+            let sy : Int = section % 3 * 3
+        
+            
+            
+            var tempx = 0
+            var tempy = 0
+            
+            repeat{
+                tempx = sx + random() % 3
+                tempy = sy + random() % 3
+            }while fillingarray[tempx][tempy]
             
         
             
-            return true
+            fillingarray[tempx][tempy] = true;
+            
+            
+            
+            
         }
+        
+        if (Runtime.isDebug()){
+            print ( "Finished Filling array")
+        }
+
+        
+        
+       //  userData!["fillingarray"] = fillingarray
+        return fillingarray
+        
+    }
+    
+    var test = 0;
+    
+   /*
+    func finishedbuildsudokunum(){
+        
+    
+        if (Runtime.isDebug()){
+            if test++ == 5{
+            print ( "Finished build sudoku num - \(dispatch_source_get_data(dispatch_source_finished_buildsudoku))")
+            }
+            }
+
+    }
+    */
     
     
     func minuswithnum(inout numarray: [[Int]],_ x:Int,_ y:Int )->Bool{
-
+        
         var array: Set<Int> = []
         
         numarray[x][y] = 0
@@ -940,20 +821,20 @@ class GameScene: SKScene {
             
             if (numarray[x][i] != 0){
                 
-             array.insert(numarray[x][i])}
+                array.insert(numarray[x][i])}
         }
         
         let sectionx:Int = (x / 3) * 3
-      
+        
         let sectiony:Int = (y / 3) * 3
-       
+        
         for var i = sectionx;i<sectionx+2;++i{
             for var j=sectiony;j<sectiony+2;++j{
-            if numarray[i][j] != 0{
-                array.insert(numarray[i][j])
+                if numarray[i][j] != 0{
+                    array.insert(numarray[i][j])
                 }
-           
-            
+                
+                
             }
         }
         
@@ -974,98 +855,812 @@ class GameScene: SKScene {
         
         let shuffled = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(seq)
         
-            numarray[x][y] = shuffled[0] as! Int
-            
+        numarray[x][y] = shuffled[0] as! Int
+        
         
         return true
     }
     
+
     
-    func makefilling() -> [[Bool]]{
+
+
+    
+    
+    // MARK: - Cache Database
+    
+    
+    
+    func readdatabasetable()->Bool{
+      return  readdatabasetable(level)
         
+    }
+    
+    
+    func readdatabasetable(level: Int)->Bool{
         
-        let level = 3 + (performance["selectedgamelevel"] as! Int) * 3
+       let tableFetch = NSFetchRequest(entityName: "Sudoku_table")
         
-        // var  numarray :[[Int]] = userData!["numarray"] as! Array
+        var sortDescriptors:[NSSortDescriptor] = []
+        sortDescriptors.append(NSSortDescriptor(key:"table",ascending: false))
+      
+        tableFetch.predicate = NSPredicate(format: "level == %d", level)
         
-        // build array for filling information (User input)
+        tableFetch.sortDescriptors = sortDescriptors
         
-        
-        
-         var fillingarray : [[Bool]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:false))
-        
-        // Dismiss
-         var numofdismiss = level + 20
-        
-        // Add random +/-3 pcs
-        
-        numofdismiss += rand() % 6 - 3
-        
-        if (numofdismiss > 70){
-            numofdismiss = 70
+        do {
+            let fetchedtable = try modelcontroller.managedObjectContext.executeFetchRequest(tableFetch) as! [Sudoku_table]
+            if Runtime.isDebug(){
+                
+                if (fetchedtable.count > 0){
+                    if (Runtime.isDebug()){
+                     print("date:\(fetchedtable[0].table),level:\(fetchedtable[0].level)")
+                    }
+                    let cardFetch = NSFetchRequest(entityName: "Sudoku_card")
+                    
+                    var cardsortDescriptors:[NSSortDescriptor] = []
+                    cardsortDescriptors.append(NSSortDescriptor(key:"pos",ascending: true))
+                    
+                    cardFetch.predicate = NSPredicate(format: "table == %@", fetchedtable[0])
+                    
+                    cardFetch.sortDescriptors = cardsortDescriptors
+                    
+                    do {
+                        let fetchedcard = try modelcontroller.managedObjectContext.executeFetchRequest(cardFetch) as! [Sudoku_card]
+                 
+                            
+                            if (fetchedcard.count == 81){
+                                
+                                
+                            var numarray : [[Int]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+                                var fillingarray : [[Bool]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:false))
+                                
+                      
+                                for var i = 0 ; i < 81 ; ++i {
+                                    
+                                    fillingarray[i/9][i%9] = (fetchedcard[i].editable==1 ? true:false)
+                                    numarray[i/9][i%9] = (fetchedcard[i].num as! Int)
+                                    if (Runtime.isDebug()){
+                                    print("pos:\(fetchedcard[i].pos as! Int),num:\(fetchedcard[i].num as! Int)")
+                                    }
+                                }
+                                
+                                userData!["numarray"] = numarray;
+                                userData!["fillingarray"] = fillingarray;
+                                
+                                modelcontroller.managedObjectContext.deleteObject(fetchedtable[0])
+                         
+
+                                        buildsudokutable(true,self.level,2)
+                                
+                               try modelcontroller.managedObjectContext.save()
+                                
+                                return true
+                                
+
+                            }else{
+                                return false
+                        }
+                        
+                        
+                    }
+                    catch{
+                        return false
+                        // fatalError("Failed to found Sudoku_card: \(error)")
+                    }
+                    
+                    
+                }else{
+                    return false
+                }
+                
+                
+                
+            }
+        } catch {
+            return false
+            //fatalError("Failed to found Sudoku_table: \(error)")
         }
         
-       
-      
-        //Loop for every 3x3 section and randomly skip one 
+        return false
         
-        var section : Int = 4
-        var x = 0
-        var y = 0
+     //   var  numarray :[[Int]] = userData!["numarray"] as! Array
+     //   var  fillingarray :[[Bool]] = userData!["fillingarray"] as! Array
+    }
+    
+    
+    func databasemodeltable(numarray : [[Int]],_ filledarray:[[Bool]])->Sudoku_table{
+       return  databasemodeltable(numarray, filledarray,self.level)
+    }
+    
+    
+    
+    func databasemodeltable(numarray : [[Int]],_ filledarray:[[Bool]],_ level : Int)->Sudoku_table{
         
-        srandom (UInt32(NSDate().timeIntervalSinceReferenceDate))
         
-        for _ in 0...numofdismiss {
-            
-            var tempsection = 0
-            
-            
-            repeat{
-            tempsection = random() % 9
-            }while (tempsection == section)
-            section = tempsection
-            
-            
-            
-            let sx : Int = section / 3 * 3
-            let sy : Int = section % 3 * 3
         
-            var tempx = 0
-            var tempy = 0
-            
-            repeat{
-            
-               
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        let sudoku_table : Sudoku_table =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_table", inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_table
+        
+        
+        sudoku_table.table = NSDate()
+        
+        var pos = 0;
+        
+        for i in 0...8{
+            for j in 0...8{
+                let sudoku_card : Sudoku_card =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_card",    inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_card
                 
-                tempx = sx + random() % 3
-                tempy = sy + random() % 3
-     
+                sudoku_card.num = numarray[i][j] as NSNumber
+                sudoku_card.editable = filledarray[i][j] as NSNumber
+                sudoku_card.pos = pos++ as NSNumber
+                
+                sudoku_table.level = level
+                sudoku_table.mutableSetValueForKey("card").addObject(sudoku_card)
+                
+            }
+        }
+        
+        
+        
+        // sudoku_table.table = NSDate()
+        
+        
+        
+        //sudoku_table.mutableSetValueForKey("card").addObject(sudoku_card)
+        
+        
+        
+        
+        
+        
+        /*
+        
+        let sudoku_tableFetch = NSFetchRequest(entityName: "Sudoku_table")
+        
+        do {
+        let fetchedSudoku_table = try modelcontroller.managedObjectContext.executeFetchRequest(sudoku_tableFetch) as! [Sudoku_table]
+        fetchedSudoku_table.endIndex
+        } catch {
+        fatalError("Failed to fetch employees: \(error)")
+        }
+        
+        
+        
+        
+        let sudoku_cardFetch = NSFetchRequest(entityName: "Sudoku_card")
+        
+        
+        do {
+        var fetchedSudoku_card = try modelcontroller.managedObjectContext.executeFetchRequest(sudoku_cardFetch) as! [Sudoku_card]
+        var sudoku_card = Sudoku_card();
+        sudoku_card.card = 1;
+        
+        
+        
+        } catch {
+        fatalError("Failed to fetch employees: \(error)")
+        }
+        
+        
+        */
+        
+        
+        
+        do {
+            try self.modelcontroller.managedObjectContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
+        
+        
+        return sudoku_table
+        
+    }
+    
+    
+    func deleteall(entity:String) {
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = NSEntityDescription.entityForName(entity, inManagedObjectContext: modelcontroller.managedObjectContext)
+        fetchRequest.includesPropertyValues = false
+        do {
+            if let results = try modelcontroller.managedObjectContext.executeFetchRequest(fetchRequest) as? [NSManagedObject] {
+                for result in results {
+                    modelcontroller.managedObjectContext.deleteObject(result)
+                }
+                
+                try modelcontroller.managedObjectContext.save()
+            }
+        } catch {
             
-            }while fillingarray[tempx][tempy] || tempx == x || tempy == y
-            
-            x = tempx
-            y = tempy
-            
-            fillingarray[x][y] = true;
-            
+            if (Runtime.isDebug()){
+                
+                
+                print ( "failed to delete the entity\(entity)")
+            }
+
             
            
+        }
+    }
+    
+    
+    func savecurrenttable(){
+        
+        deleteall("Sudoku_restore")
+        
+        
+      
+        
+      
+        
+     
+        
+        do{
+        
+
+
+        
+        for i in 9...89 {
+            
+            
+            let sudoku_restore : Sudoku_restore =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_restore", inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_restore
+            let node = children[i] as! SudokuBoxSKNode
+            let editable  = node.userData!["editable"] as! NSNumber
+            let correctnum = node.userData!["correctnum"] as! NSNumber
+            let fillednum  = node.userData!["fillednum"] as! NSNumber
+            
+            
+            sudoku_restore.editable =  editable
+            sudoku_restore.num =  correctnum
+            sudoku_restore.fillednum = fillednum
+            sudoku_restore.pos = (i - 9) as NSNumber
+            }
+
+          try modelcontroller.managedObjectContext.save()
+        }catch {
+            
+            if (Runtime.isDebug()){
+                
+                
+                print ( "failed to save current table")
+            }
+            
+            
             
         }
         
-       return fillingarray
+        if (Runtime.isDebug()){
+            
+            
+            print ( "Finished save current table")
+        }
+    }
+    
+    func retrievecurrenttable(){
+        
+        let cardFetch = NSFetchRequest(entityName: "Sudoku_restore")
+        
+        var cardsortDescriptors:[NSSortDescriptor] = []
+        cardsortDescriptors.append(NSSortDescriptor(key:"pos",ascending: true))
+        
+       
+        
+        cardFetch.sortDescriptors = cardsortDescriptors
+        
+        do {
+            let fetchedcard = try modelcontroller.managedObjectContext.executeFetchRequest(cardFetch) as! [Sudoku_restore]
+            
+            
+            if (fetchedcard.count == 81){
+                
+                
+                var numarray : [[Int]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+                var fillednumarray : [[Int]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+                var fillingarray : [[Bool]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:false))
+                
+                
+                for var i = 0 ; i < 81 ; ++i {
+                    
+                    fillingarray[i/9][i%9] = (fetchedcard[i].editable==1 ? true:false)
+                    numarray[i/9][i%9] = (fetchedcard[i].num as! Int)
+                    fillednumarray[i/9][i%9] = (fetchedcard[i].fillednum as! Int)
+                    
+                    if (Runtime.isDebug()){
+                        print("pos:\(fetchedcard[i].pos as! Int),num:\(fetchedcard[i].num as! Int)")
+                    }
+                }
+                
+                userData!["numarray"] = numarray;
+                userData!["fillingarray"] = fillingarray;
+                
+             
+                
+                
+                for var i=0; i < 9 ; ++i {
+                    
+                    for var j=0; j < 9; ++j{
+                        let node = children[9+i*9+j] as! SudokuBoxSKNode
+                        if (fillingarray[i][j]){
+                            ++numTotalfillBox
+                            if (fillednumarray[i][j] > 0){
+                                ++numfilledBox
+                            }
+                        }
+                        
+                        node.setNumValue(numarray[i][j], fillingarray[i][j],false,fillednumarray[i][j])
+                        
+                            node.checkcorrect()
+                        
+                    }
+                }
+                
+                refreshHint()
+                
+           
+                
+                
+            }
+        }catch{
+            
+            if (Runtime.isDebug()){
+                
+                
+                print ( "failed to retrieve current table")
+            }
+
+        }
+
+    }
+    
+    
+    //MARK: - Refreshing
+
+    func refreshHint(){
+        self.setAllShowhint(performance["auto_hint"] as! Bool)
+        self.updatehint()
+    }
+    
+    
+    // MARK: - Startup Process
+    
+    func buildupcachetable(){
+      
+            let second : Double = 5
+        
+           let time = dispatch_time(DISPATCH_TIME_NOW, Int64(second * Double(NSEC_PER_SEC)))
+            dispatch_after(time, self.concurrencySudokuBackGroundQueue){
+                
+                // Build Selected Level Cache
+                for i in 0...5{
+                    
+                  //  let int_time = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
+                  //  dispatch_after(int_time, self.concurrencySudokuBackGroundQueue){
+
+                    
+                    let level =  self.peformanceleveltolevel(i)
+                    self.buildsudokutable(true,level,3)
+                  //  }
+                    
+                }
+                
+                
+                // Build Next Level Cache
+                
+                self.buildsudokutable(true,self.level+1)
+                
+
+                
+                
+            }
+            
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    func startupNumRestore(){
+    
+    
+    let restoreFetch = NSFetchRequest(entityName: "Sudoku_restore")
+    do {
+    let fetchedrestore = try modelcontroller.managedObjectContext.executeFetchRequest(restoreFetch) as! [Sudoku_restore]
+        
+        if (fetchedrestore.count == 0){
+            newsudoku()
+            buildupcachetable()
+            return
+        }
+        
+        retrievecurrenttable()
+       
+
+    } catch {
+        fatalError("Failure to open Restore Database: \(error)")
+        
+        }
+
+        refreshHint()
+    
+       
+    
+    
+ 
+    }
+   
+    
+    
+    // MARK: - LifeCycle
+
+    override func didMoveToView(view: SKView) {
+        /* Setup your scene here */
+        
+/*
+        dispatch_source_finished_buildsudoku = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, concurrencySudokuQueue)
+        
+        dispatch_source_set_event_handler(dispatch_source_finished_buildsudoku){
+            
+            self.finishedbuildsudokunum();
+        }
+        
+         dispatch_resume(dispatch_source_finished_buildsudoku)
+        
+  */
+        
+      
+
+        
+        
+        userData = ["selectedbox":  -1]
+        
+        
+        
+       
+        
+        //userData!["allcheckcorrect"] = false
+        //userData!["showhint"] = false
+     
+        
+        
+      //  userData!["showhint"] = false
+       // var numarray: [[Int]] = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+        
+   //   buildsudokutable ()
+        
+        
+        
+    //  let level = 3 + (performance["selectedgamelevel"] as! Int) * 3
+            // numarray = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
+        
+      //  var  fillingarray :[[Int]] = userData!["fillingarray"] as! Array
+
+        
+       // databasemodeltable(numarray,fillingarray)
+        
+        
+        let offset :CGFloat = 10
+        let groupgap :CGFloat = 15
+
+        let maxX :CGFloat = self.frame.maxX
+        let maxY  :CGFloat =  self.frame.maxY
+        let minX  :CGFloat =  self.frame.minX
+        let minY  :CGFloat = self.frame.minY
+        let stepX  :CGFloat =  (maxX-minX-offset*2-groupgap*2)/9
+        let stepY  :CGFloat =  (maxY-minY-offset*2*0.75-groupgap*2)/9
+        
+        
+        for var i=0; i < 3 ; ++i {
+            
+            for var j=0; j < 3; ++j{
+   
+                
+                let gapoffsetx = offset + groupgap * CGFloat (i)
+                let gapoffsety = 0.75 * offset + groupgap * CGFloat(j)
+                
+              //  let rect = CGRectMake(gapoffsetx + (CGFloat (i) * stepX), self.frame.maxY - gapoffsety - ( CGFloat (j) * stepY + stepY), stepX, stepY)
+            
+            let bigrect = CGRectMake(gapoffsetx + (CGFloat (i*3) * stepX),  self.frame.maxY - gapoffsety - ( CGFloat (j*3) * stepY )-stepY*3, stepX*3, stepY*3)
+            let drawpath = CGPathCreateWithRoundedRect(bigrect, offset, offset, nil)
+            let bigshapenode = SKShapeNode(path: drawpath)
+            bigshapenode.fillColor = SKColor.grayColor()
+            self.addChild(bigshapenode)
+            
+                }
+            
+        }
+
+        
+        
+        
+        for var i=0; i < 9 ; ++i {
+            
+            for var j=0; j < 9; ++j{
+                
+ 
+        
+
+        
+       let shapenode = SudokuBoxSKNode()
+        
+        let gapoffsetx = offset + CGFloat(i / 3) * groupgap
+        let gapoffsety = 0.75 * offset + CGFloat(j / 3) * groupgap
+                
+        let rect = CGRectMake(gapoffsetx + (CGFloat (i) * stepX), self.frame.maxY - gapoffsety - ( CGFloat (j) * stepY + stepY), stepX, stepY)
+                
+            shapenode.BuildupBox(rect,0,9+i*9+j,false)
+         
+                
+            //    shapenode.BuildupBox(rect,numarray[i][j],9+i*9+j,fillingarray[i][j])
+
+                
+                
+         self.addChild(shapenode)
+                
+            }
+        }
+        
+       //  shapenode.position = CGPointMake(800,600)
+        
+        
+        
+     
+            
+        
+      
+            
+            startupNumRestore()
+            
+             updateAllAutoCheck()
+            
+      
+        
+        
+        
+        
+ 
+         
+      
+    }
+    
+    
+    
+    
+    override func willMoveFromView(view: SKView) {
+        savecurrenttable()
+    }
+    
+    override func update(currentTime: CFTimeInterval) {
+        /* Called before each frame is rendered */
+        
+        
+        
+        
+    }
+    
+    func finishedcheck(){
+        
+        var correctnum = 0
+        for i in 9...89 {
+            let node = children[i] as! SudokuBoxSKNode
+            if node.checkcorrect(){
+                ++correctnum
+            }
+        }
+
+        if correctnum != numTotalfillBox {
+            return
+        }
+        
+        newsudoku()
+    }
+    
+    
+    
+        // MARK: - User Input
+    
+    override func mouseDown(theEvent: NSEvent) {
+        /* Called when a mouse click occurs */
+        
+        
+    }
+    
+    
+    
+    
+    
+    override func keyDown(theEvent: NSEvent) {
+        // if (!userData["editable"]){
+        //  return
+        //      }
+        
+        
+        
+        
+        
+        if (userData!["selectedbox"] as! Int == -1){
+            return
+        }
+        
+        
+        
+        var nonfill = false
+        let node = children[userData!["selectedbox"] as! Int ] as! SudokuBoxSKNode
+        
+        if (node.userData!["fillednum"] as! Int == 0){
+            nonfill = true
+        }
+        
+        if (!node.changetext(theEvent)){
+            
+            interpretKeyEvents([theEvent])
+        }else{
+        
+      
+        if (nonfill){
+            if (numTotalfillBox == ++numfilledBox){
+                finishedcheck()
+                }
+            }
+        }
+        updatehint()
+        
+    }
+    
+    override func moveUp(sender: AnyObject?) {
+        
+        let selectedbox = userData!["selectedbox"] as! Int
+        if ( selectedbox == -1){
+            return
+        }
+        
+        if (selectedbox  == 9){
+            return
+        }
+        
+        var minus:Int = 1
+        while (!((children[selectedbox - minus] as! SudokuBoxSKNode).isEditable())){
+            minus += 1
+            if ((selectedbox - minus) <= 8){
+                
+                return
+            }
+        }
+        
+        userData!["selectedbox"] = selectedbox - minus
+        
+        updateselectedbox(selectedbox)
+        
+        
+        
+    }
+    
+    override func moveDown(sender: AnyObject?) {
+        
+        let selectedbox = userData!["selectedbox"] as! Int
+        if ( selectedbox == -1){
+            return
+        }
+        
+        if (selectedbox == 89){
+            return
+        }
+        
+        var add:Int = 1
+        while (!((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())){
+            add += 1
+            if (add+selectedbox >=  90){
+                return
+            }
+        }
+        
+        
+        
+        userData!["selectedbox"] = selectedbox + add
+        
+        updateselectedbox(selectedbox)
+        
+    }
+    
+    override func moveLeft(sender: AnyObject?) {
+        
+        let selectedbox = userData!["selectedbox"] as! Int
+        
+        
+        //if (selectedbox  < 18){
+        //return
+        //}
+        
+        
+        var minus:Int = 0
+        
+        repeat {
+            minus += 9
+            if (selectedbox - minus < 9){
+                minus -= 82 }
+            
+            if (selectedbox - minus >= 90){
+                return
+            }
+            
+            //return
+        }while !((children[selectedbox - minus] as! SudokuBoxSKNode).isEditable())
+        
+        
+        
+        userData!["selectedbox"] = selectedbox - minus
+        
+        updateselectedbox(selectedbox)
+        
+    }
+    
+    override func moveRight(sender: AnyObject?) {
+        
+        let selectedbox = userData!["selectedbox"] as! Int
+        if ( selectedbox == -1){
+            return
+        }
+        
+        // if (selectedbox >= 81){
+        //     return
+        // }
+        
+        var add:Int = 0
+        repeat{
+            add += 9
+            
+            
+            if (add+selectedbox >= 90){
+                add -= 82
+            }
+            if (add+selectedbox <= 8){
+                return
+            }
+        }while !((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())
+        
+        userData!["selectedbox"] = selectedbox + add
+        
+        updateselectedbox(selectedbox)
+        
+    }
+    
+    
+
+       // MARK: -
+    
+    func updateselectedbox(previous: Int){
+        (children[previous] as! SudokuBoxSKNode).setDeselected()
+    (children[userData!["selectedbox"] as! Int] as! SudokuBoxSKNode).setSelected()
+        
         
     }
     
     
     
 
-    func checkallboxcorrect(){
-        
+    func checkallboxcorrect()->Int{
+        var numofcorrect : Int = 0
+        dispatch_async(GlobalMainQueue){
         for i in 9...89 {
-            let node = children[i] as! SudokuBoxSKNode
-            node.checkcorrect()
+            let node = self.children[i] as! SudokuBoxSKNode
+            if (node.checkcorrect()){
+                ++numofcorrect
+            }
         }
+        }
+        
+        return numofcorrect
     }
     
     
@@ -1073,20 +1668,30 @@ class GameScene: SKScene {
     
      func autocheckcorrect(sender: NSMenuItem) {
         
+        var changecolor = false
         
         if (sender.state == NSOffState){
             sender.state = NSOnState
               performance["auto_check"] = true
             AppDelegate.writeperformance("auto_check", true)
-            
-            checkallboxcorrect()
+            changecolor = true
+           // checkallboxcorrect()
             
             
         }else{
         sender.state = NSOffState
              performance["auto_check"] = false
              AppDelegate.writeperformance("auto_check", false)
+            
+         
+            
         }
+        
+        for i in 9...89 {
+            let node = children[i] as! SudokuBoxSKNode
+            node.correctChangeColor(changecolor)
+        }
+
         
         if (Runtime.isDebug()){
             print ( "select all input check  @ GameScene" + String (performance["auto_check"]) )
@@ -1102,7 +1707,42 @@ class GameScene: SKScene {
             print ( "select check only this  @ GameScene")
         }
         
-            checkallboxcorrect()
+        let selected = userData!["selectedbox"] as! Int
+        
+        if (selected == -1){
+            return
+        }
+        
+        let node = children[selected] as! SudokuBoxSKNode
+        
+        if node.correctChangeColor {
+             return
+        }
+        
+            
+        if node.checkcorrect(){
+             (node.children[0].children[0] as! SKLabelNode).fontColor = node.editCorrectColor
+        }
+        
+        let second : Double = 5
+        
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(second * Double(NSEC_PER_SEC)))
+        dispatch_after(time, GlobalMainQueue){
+          
+            if node.correctChangeColor {
+                return
+            }
+            (node.children[0].children[0] as! SKLabelNode).fontColor = node.editInCorrectColor
+                
+         
+
+            
+        
+        }
+
+        
+        
+           // checkallboxcorrect()
         
         
     }
@@ -1143,14 +1783,31 @@ class GameScene: SKScene {
         
     }
     
-    func updatehint(){
+    
+    func updateAllAutoCheck(){
+        
+        let check = performance["auto_check"] as! Bool
         
         for i in 9...89 {
-            let node = children[i] as! SudokuBoxSKNode
-            node.updatehint()
+            let node = self.children[i] as! SudokuBoxSKNode
+            node.correctChangeColor(check)
         }
-        
     }
+
+    
+    
+    
+    func updatehint(){
+        
+        dispatch_async(GlobalMainQueue){
+
+        for i in 9...89 {
+            let node = self.children[i] as! SudokuBoxSKNode
+            node.updatehint()
+            }
+        }
+    }
+    
     /*
     func writeperformance(key: String,_ value:CFPropertyList){
      CFPreferencesSetAppValue(key, value,kCFPreferencesCurrentApplication)
@@ -1158,3 +1815,7 @@ class GameScene: SKScene {
     }*/
 
 }
+
+
+
+
