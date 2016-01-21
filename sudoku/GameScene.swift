@@ -17,7 +17,13 @@ import GameKit
 
 class GameScene: SKScene {
     
+    let finishedboxfilledColor = NSColor(red:0.8,green:0.8,blue:0.24,alpha:0.8)
+    let finishedboxtextColor = NSColor(red:0.2,green:0.2,blue:0.2,alpha:0.8)
+    static let MAXLEVEL = 60
+    static let MINLEVEL = 3
     
+    
+    var appDelegate : AppDelegate!
    
     
     private let concurrencySudokuQueue = dispatch_queue_create(
@@ -28,17 +34,38 @@ class GameScene: SKScene {
   //  private var dispatch_source_finished_buildsudoku : dispatch_source_t!
     
     
+   private var _isShowNextGame  = false
+    
+   private var isClosingNextGame = false
+    
+    var isShowNextGame: Bool{
+        get {
+            return _isShowNextGame
+        }
+        
+       
+        
+    }
+    
+    
+    var isShowNextGameLogo: Bool{
+        if _isShowNextGame || isClosingNextGame {
+            return true
+        }else{
+            return false
+        }
+    }
+    
+    
+    
 
     
-    
-    
-    
 
-    
-
-    private var level: Int = 0;
-    private var numfilledBox: Int = 0;
+     var level: Int = MINLEVEL;
+    var numfilledBox: Int = 0;
     private var numTotalfillBox: Int = 0;
+    
+    var selectedlevelchangenexttime = false;
 
    
     var performance = [String:AnyObject]()
@@ -52,10 +79,13 @@ class GameScene: SKScene {
     
     
     func levelresettoperformance(){
-        level = peformanceleveltolevel(performance["selectedgamelevel"] as! Int)
+        level = preferenceleveltolevel(performance["selectedgamelevel"] as! Int)
+        selectedlevelchangenexttime = true
+        AppDelegate.writePreference("level",level)
+        
     }
     
-    func peformanceleveltolevel(PerformaceLevel: Int)-> Int{
+    func preferenceleveltolevel(PerformaceLevel: Int)-> Int{
         return 3 + (PerformaceLevel) * 10
     }
     
@@ -68,6 +98,18 @@ class GameScene: SKScene {
         
         
         
+        
+        
+       self.scene!.view!.window!.undoManager!.removeAllActions()
+        
+        
+        
+        
+        
+        
+        
+      
+
         
         if (userData!["mixedstatemenu"] != nil){
             (userData!["mixedstatemenu"] as! NSMenuItem).state = NSOffState
@@ -106,14 +148,38 @@ class GameScene: SKScene {
                 if (fillingarray[i][j]){
                     ++numTotalfillBox
                 }
+               let node = children[9+i*9+j] as! SudokuBoxSKNode
                 
-                
-                (children[9+i*9+j] as! SudokuBoxSKNode).setNumValue(numarray[i][j], fillingarray[i][j],false)
+                node.setNumValue(numarray[i][j], fillingarray[i][j],false)
+               
             }
         }
+         updatetextfadeout()
         updateAllAutoCheck()
         refreshHint()
+        
+       checkselectedbox()
+        selectnearcenter()
+    
+        
+        
       //  self.updatehint()
+    }
+    
+    
+    func checkselectedbox(){
+        if userData!["selectedbox"] as! Int == -1{
+            return
+        }
+        
+        let selected = children[userData!["selectedbox"] as! Int] as! SudokuBoxSKNode
+        if !selected.isEditable() {
+            
+            userData!["selectedbox"] = -1;
+            selected.setDeselected()
+
+            
+        }
     }
     
     func changemixedstatenextgame(mixedstatemenu: NSMenuItem){
@@ -122,8 +188,19 @@ class GameScene: SKScene {
 
     // MARK: - Support Undo / Redo
  
-    func windowWillReturnUndoManager(window: NSWindow) -> NSUndoManager? {
-        return modelcontroller.managedObjectContext.undoManager
+  
+    
+  
+ 
+   
+    
+    
+    @IBAction func undo (sender: NSButtonCell){
+        
+    }
+    
+    @IBAction func redo (sender: NSButtonCell){
+        
     }
     
     
@@ -133,7 +210,10 @@ class GameScene: SKScene {
     
     func buildsudokutable (isRunBackGround : Bool){
         return buildsudokutable(isRunBackGround,self.level)
+        
     }
+    
+    
     
     
     
@@ -149,6 +229,18 @@ class GameScene: SKScene {
         let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
         
         let buildConcurrencyGroup = dispatch_group_create()
+        
+        
+        if checkwiththislevel(level){
+            
+            
+            readdatabasetable(level)
+            newsudokubuildednum()
+            
+            return
+        }
+        
+        
      
         dispatch_async(runqueue){
             dispatch_group_enter(buildConcurrencyGroup)
@@ -874,6 +966,7 @@ class GameScene: SKScene {
     func readdatabasetable()->Bool{
       return  readdatabasetable(level)
         
+        
     }
     
     
@@ -931,7 +1024,7 @@ class GameScene: SKScene {
                                 modelcontroller.managedObjectContext.deleteObject(fetchedtable[0])
                          
 
-                                        buildsudokutable(true,self.level,2)
+                                        buildsudokutable(true,self.level+1,2)
                                 
                                try modelcontroller.managedObjectContext.save()
                                 
@@ -1145,6 +1238,41 @@ class GameScene: SKScene {
         }
     }
     
+    
+    
+    private func checkwiththislevel(level: Int)->Bool{
+        
+        
+        let tableFetch = NSFetchRequest(entityName: "Sudoku_table")
+        
+        var sortDescriptors:[NSSortDescriptor] = []
+        sortDescriptors.append(NSSortDescriptor(key:"table",ascending: false))
+        
+        tableFetch.predicate = NSPredicate(format: "level == %d", level)
+        
+        tableFetch.sortDescriptors = sortDescriptors
+        
+        do {
+            let fetchedtable = try modelcontroller.managedObjectContext.executeFetchRequest(tableFetch) as! [Sudoku_table]
+            if fetchedtable.count == 0{
+                
+                return false
+            }
+            
+        }catch{
+            fatalError("Failed to found Sudoku_table: \(error)")
+        }
+        
+        if Runtime.isDebug(){
+            print("Database with this \(level).")
+        }
+        return true
+        
+    }
+
+    
+    
+    
     func retrievecurrenttable(){
         
         let cardFetch = NSFetchRequest(entityName: "Sudoku_restore")
@@ -1246,7 +1374,7 @@ class GameScene: SKScene {
                   //  dispatch_after(int_time, self.concurrencySudokuBackGroundQueue){
 
                     
-                    let level =  self.peformanceleveltolevel(i)
+                    let level =  self.preferenceleveltolevel(i)
                     self.buildsudokutable(true,level,3)
                   //  }
                     
@@ -1255,6 +1383,9 @@ class GameScene: SKScene {
                 
                 // Build Next Level Cache
                 
+                self.buildsudokutable(true,self.level+1)
+                
+                // Build This Level Cache
                 self.buildsudokutable(true,self.level+1)
                 
 
@@ -1300,7 +1431,9 @@ class GameScene: SKScene {
  
     }
    
-    
+    func undotext(){
+        
+    }
     
     // MARK: - LifeCycle
 
@@ -1319,11 +1452,13 @@ class GameScene: SKScene {
         
   */
         
-      
-
+     
+       
+        userData = NSMutableDictionary()
+   
         
         
-        userData = ["selectedbox":  -1]
+        userData!["selectedbox"] = -1
         
         
         
@@ -1439,6 +1574,7 @@ class GameScene: SKScene {
     
     override func willMoveFromView(view: SKView) {
         savecurrenttable()
+       
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -1450,78 +1586,318 @@ class GameScene: SKScene {
     }
     
     func finishedcheck(){
+    
         
+        let second : Double = 1
+        
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(second * Double(NSEC_PER_SEC)))
+        
+        dispatch_after(time,GlobalMainQueue){
         var correctnum = 0
         for i in 9...89 {
-            let node = children[i] as! SudokuBoxSKNode
+            let node = self.children[i] as! SudokuBoxSKNode
             if node.checkcorrect(){
                 ++correctnum
             }
         }
 
-        if correctnum != numTotalfillBox {
+        if correctnum != self.numTotalfillBox {
             return
+            }
+            
+            
+            
+            
+                  self.shownextsudoku()
         }
         
-        newsudoku()
+        
+        
+  
     }
     
+    
+    func shownextsudoku(){
+         _isShowNextGame = true
+        let shapenode = SKShapeNode()
+        let lablenode = SKLabelNode()
+        
+        
+        
+        
+        let drawpath = CGPathCreateMutable()
+        
+        var drawrect = self.calculateAccumulatedFrame()
+        
+        
+        shapenode.position = CGPointMake(drawrect.size.width/2, drawrect.size.height/2)
+        drawrect.size.height /= 3
+        drawrect.size.width /= 2
+        drawrect.origin.x -= drawrect.size.width / 2
+        drawrect.origin.y -= drawrect.size.height / 2
+        
+        
+        CGPathAddRoundedRect(drawpath, nil, drawrect,25,25)
+        CGPathCloseSubpath(drawpath)
+        
+        
+        lablenode.fontName = "Chalkduster"
+        lablenode.fontSize = 48
+        lablenode.text = NSLocalizedString("nextgametext", comment: "Next Game Show Text")
+        lablenode.color = finishedboxtextColor
+        lablenode.position.y -= 50
+        
+           lablenode.zPosition = 110
+        
+
+        lablenode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        
+        //CGPathAddLineToPoint(drawpath,nil,-100,-100);
+        
+        shapenode.name = "nextgame"
+        shapenode.path = drawpath;
+        
+        shapenode.fillColor = finishedboxfilledColor
+        // shapenode.fillColor = noneditColor
+        shapenode.lineWidth = 0
+        shapenode.lineJoin = CGLineJoin.Round
+        
+        shapenode.zPosition = 100
+        
+        shapenode.alpha = 0
+       // lablenode.alpha = 0
+     
+        
+        let action = SKAction . fadeInWithDuration(1.5)
+        
+        
+         self.addChild(shapenode)
+        shapenode.addChild(lablenode)
+        shapenode.runAction(action)
+        //lablenode.runAction(action)
+     
+    
+        
+       
+
+        
+        
+ 
+        
+       
+    }
+    
+    
+    func startNextGame(){
+        if isShowNextGame {
+        
+            
+            let fadeoutAction = SKAction.fadeOutWithDuration(1.5)
+            let runaction = SKAction.runBlock(){
+                 self.isClosingNextGame = false
+            }
+            let removeAction = SKAction.removeFromParent()
+            let seqAction : [SKAction] = [fadeoutAction,runaction,removeAction]
+            
+            let action = SKAction.sequence(seqAction)
+            
+            if (performance["increase_level"] as! Bool){
+            if !selectedlevelchangenexttime {
+     
+                if level < GameScene.MAXLEVEL  {
+                  
+                
+                
+                    ++level
+                AppDelegate.writePreference("level",level)
+
+            for i in 0...5 {
+                if level ==  preferenceleveltolevel(i){
+                    appDelegate.ResetLevlMenu(i)
+                    break;
+                                }
+                
+                            }
+                    }
+            }else{
+            selectedlevelchangenexttime = false
+                }
+            
+            }
+            
+       childNodeWithName("nextgame")!.runAction(action)
+         
+            
+           
+            
+        
+            
+                self.isClosingNextGame = true
+                 self._isShowNextGame = false
+            
+            
+            newsudoku()
+        }
+    }
     
     
         // MARK: - User Input
     
     override func mouseDown(theEvent: NSEvent) {
+        
+        
+        
         /* Called when a mouse click occurs */
         
+        if isClosingNextGame{
+            return
+        }
+      
+        
+        if (isShowNextGame){
+            
+            startNextGame()
+                
+            
+         return
+            
+        }
         
     }
     
     
+        
     
-    
-    
+ 
     override func keyDown(theEvent: NSEvent) {
         // if (!userData["editable"]){
         //  return
         //      }
         
-        
-        
-        
-        
-        if (userData!["selectedbox"] as! Int == -1){
+        if isClosingNextGame{
             return
         }
         
+        if isShowNextGame{
+            startNextGame()
+            return
+            
+        }
+        
+      
+   
+        
+        if (Runtime.isDebug()){
+            let char = theEvent.characters!
+            
+                if (char == "t"){
+                    
+                    for i in 9...89 {
+                        let node = self.children[i] as! SudokuBoxSKNode
+                        node.updatehint()
+                        if node.userData!["fillednum"] as! Int == 0 && node.userData!["editable"] as! Bool == true {
+                            
+                            node.userData!["fillednum"] = node.userData!["correctnum"]
+                           (node.children[0].children[0] as! SKLabelNode).text = String (node.userData!["fillednum"] as! Int)
+                            node.checkcorrect()
+                            node.updatehint()
+                            ++numfilledBox
+                            }
+                        if numfilledBox == numTotalfillBox-1 {
+                            break
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                }
+
+            
+            
+        
+
+       
+
+    
         
         
         var nonfill = false
         let node = children[userData!["selectedbox"] as! Int ] as! SudokuBoxSKNode
         
+      
+       // undoM.prepareWithInvocationTarget(self).undochangetext(node.userData!["fillednum"] as! Int)
+       // undoM.setActionName("Num Change")
+        
+       // undoM.undo()
+        
+        
         if (node.userData!["fillednum"] as! Int == 0){
             nonfill = true
-        }
+                   }
         
         if (!node.changetext(theEvent)){
             
             interpretKeyEvents([theEvent])
         }else{
         
-      
-        if (nonfill){
-            if (numTotalfillBox == ++numfilledBox){
-                finishedcheck()
-                }
+     
+            
+            
+            
+            if nonfill {
+            ++numfilledBox
             }
+            
+            if (numTotalfillBox == numfilledBox){
+                finishedcheck()
+            }
+
         }
         updatehint()
         
     }
     
-    override func moveUp(sender: AnyObject?) {
+    func selectnearcenter(){
         
         let selectedbox = userData!["selectedbox"] as! Int
+        if ( selectedbox != -1){
+           (children[selectedbox] as! SudokuBoxSKNode).setDeselected()
+         
+        }
+      
+        var selected = 49
+        var stage = 0
+        while (!(children[selected] as! SudokuBoxSKNode).isEditable()){
+            switch stage % 4{
+            case 0:
+                ++selected
+            case 1:
+                selected += 9
+            case 2:
+                --selected
+            
+            case 3:
+                selected -= 9
+            default:
+                break
+            }
+            ++stage
+            
+        }
+        
+        (children[selected] as! SudokuBoxSKNode).setSelected()
+        
+        userData!["selectedbox"] = selected
+        
+    }
+    
+    override func moveUp(sender: AnyObject?) {
+        shiftcheck(3)
+        /*
+        let selectedbox = userData!["selectedbox"] as! Int
         if ( selectedbox == -1){
+           // selectnearcenter()
             return
         }
         
@@ -1541,15 +1917,140 @@ class GameScene: SKScene {
         userData!["selectedbox"] = selectedbox - minus
         
         updateselectedbox(selectedbox)
-        
+        */
         
         
     }
     
+    func shiftcheck(direction : Int)->Int{
+        
+        func tobox(x:Int,_ y:Int)->Int{
+            return x * 9 + y + 9
+        }
+        
+        func frombox(box:Int)->(x:Int,y:Int){
+            let b = box - 9
+            let x = b / 9
+            let y = b % 9
+            return (x,y)
+        }
+        
+        func within(x:Int,_ y:Int)->Bool{
+            if x < 0{
+                return false}
+            if y < 0{
+                return false}
+            if x > 9{
+                return false}
+            if y > 9{
+                return false}
+            
+            return true
+        }
+        
+        func matrix (x:Int,_ y:Int,_ direction:Int)->[Int]{
+            var raw :[[Int]] = []
+            for i in 1...8{
+                raw.append([i,0])
+                for j in 1...i{
+                    raw.append([i,j])
+                    raw.append([i,-j])
+                }
+            }
+            
+            var trans_matrix :[[Int]] = []
+            switch (direction){
+            case 0:  //0 Left
+                trans_matrix = [[1,0],[0,1]]
+            case 1:  //90 Down
+                trans_matrix = [[0,-1],[1,0]]
+            case 2:  //180 Right
+                trans_matrix = [[-1,0],[0,-1]]
+            case 3:  //270 Up
+                trans_matrix = [[0,1],[-1,0]]
+            default:
+                break
+            }
+            
+            var checkpos :[Int] = []
+            for i in raw {
+                let z = i[0] * trans_matrix[0][0] + i[1] * trans_matrix[0][1] + x
+                let j = i[0] * trans_matrix[1][0] + i[1] * trans_matrix[1][1] + y
+                
+                if (z >= 9 || j >= 9 || z < 0 || j < 0){
+                continue;
+                }
+                
+                
+                
+                checkpos.append(tobox(z,j))
+                
+                
+            }
+            
+            
+            
+            return checkpos
+            
+            
+        }
+       
+        
+        
+        
+        
+        
+        let selectedbox = userData!["selectedbox"] as! Int
+       
+        let matrixbox = frombox(selectedbox)
+        
+        let keypath = matrix(matrixbox.x,matrixbox.y,direction)
+       
+        
+        var boxnum = -1;
+        
+        for i in keypath {
+            let box = children[i] as! SudokuBoxSKNode
+            if box.isEditable(){
+                boxnum = i
+                break
+            }
+        }
+        
+        if (boxnum == -1){
+            return -1
+        }
+        /*
+        
+        var add:Int = 1
+        while (!((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())){
+        add += 1
+        
+        if (add+selectedbox >=  90){
+        return
+        }
+        }
+        
+        */
+        
+        userData!["selectedbox"] = boxnum
+        
+        updateselectedbox(selectedbox)
+        
+        
+        return boxnum
+    
+    
+    }
+    
     override func moveDown(sender: AnyObject?) {
+        
+         shiftcheck(1)
+        /*
         
         let selectedbox = userData!["selectedbox"] as! Int
         if ( selectedbox == -1){
+            //selectnearcenter()
             return
         }
         
@@ -1557,26 +2058,48 @@ class GameScene: SKScene {
             return
         }
         
+       */
+        /*
+        var boxnum = -1;
+        
+        for i in result {
+            let box = children[i] as! SudokuBoxSKNode
+            if box.isEditable(){
+               boxnum = i
+                break
+            }
+        }
+        
+        if (boxnum == -1){
+                return
+        }*/
+        /*
+        
         var add:Int = 1
         while (!((children[selectedbox + add] as! SudokuBoxSKNode).isEditable())){
             add += 1
+          
             if (add+selectedbox >=  90){
                 return
             }
         }
         
-        
-        
-        userData!["selectedbox"] = selectedbox + add
+        */
+        /*
+        userData!["selectedbox"] = boxnum
         
         updateselectedbox(selectedbox)
-        
+        */
     }
     
     override func moveLeft(sender: AnyObject?) {
-        
+        shiftcheck(2)
+        /*
         let selectedbox = userData!["selectedbox"] as! Int
-        
+        if ( selectedbox == -1){
+           // selectnearcenter()
+            return
+        }
         
         //if (selectedbox  < 18){
         //return
@@ -1601,14 +2124,16 @@ class GameScene: SKScene {
         
         userData!["selectedbox"] = selectedbox - minus
         
-        updateselectedbox(selectedbox)
+        updateselectedbox(selectedbox)*/
         
     }
     
     override func moveRight(sender: AnyObject?) {
-        
+        shiftcheck(0)
+        /*
         let selectedbox = userData!["selectedbox"] as! Int
         if ( selectedbox == -1){
+          //  selectnearcenter()
             return
         }
         
@@ -1631,7 +2156,7 @@ class GameScene: SKScene {
         
         userData!["selectedbox"] = selectedbox + add
         
-        updateselectedbox(selectedbox)
+        updateselectedbox(selectedbox)*/
         
     }
     
@@ -1666,22 +2191,22 @@ class GameScene: SKScene {
     
     
     
-     func autocheckcorrect(sender: NSMenuItem) {
+     func autocheckcorrect(sender: NSButton) {
         
         var changecolor = false
         
-        if (sender.state == NSOffState){
-            sender.state = NSOnState
+        if (sender.state == NSOnState){
+            //sender.state = NSOnState
               performance["auto_check"] = true
-            AppDelegate.writeperformance("auto_check", true)
+            AppDelegate.writePreference("auto_check", true)
             changecolor = true
            // checkallboxcorrect()
             
             
         }else{
-        sender.state = NSOffState
+       // sender.state = NSOffState
              performance["auto_check"] = false
-             AppDelegate.writeperformance("auto_check", false)
+             AppDelegate.writePreference("auto_check", false)
             
          
             
@@ -1750,18 +2275,18 @@ class GameScene: SKScene {
     
     
     
-   func showhint(sender: NSMenuItem) {
+   func autoshowhint(sender: NSButton) {
         if (Runtime.isDebug()){
             print ( "select hint @ GameScene ")
         }
-        if (sender.state == NSOffState){
-            sender.state = NSOnState
+        if (sender.state == NSOnState){
+         //   sender.state = NSOnState
             performance["auto_hint"] = true
             //userData!["showhint"] = true
             self.setAllShowhint(true)
             
         }else{
-            sender.state = NSOffState
+         //   sender.state = NSOffState
            performance["auto_hint"] = false
 
             // userData!["showhint"] = false
@@ -1769,9 +2294,9 @@ class GameScene: SKScene {
         }
     
     
-     AppDelegate.writeperformance("auto_hint", performance["auto_hint"]!)
+     AppDelegate.writePreference("auto_hint", performance["auto_hint"]!)
+  
     updatehint()
-    
     }
     
     func setAllShowhint(isShowhint: Bool){
@@ -1805,6 +2330,14 @@ class GameScene: SKScene {
             let node = self.children[i] as! SudokuBoxSKNode
             node.updatehint()
             }
+        }
+    }
+    
+    
+    func updatetextfadeout(){
+        for i in 9...89 {
+            let node = self.children[i] as! SudokuBoxSKNode
+            node.updatetextfadeIn()
         }
     }
     

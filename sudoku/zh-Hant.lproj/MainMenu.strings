@@ -1,123 +1,157 @@
-
-/* Class = "NSMenuItem"; title = "將此程式所有視窗移到最前"; ObjectID = "5"; */
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "5"; */
 "5.title" = "將此程式所有視窗移到最前";
 
-/* Class = "NSMenuItem"; title = "視窗"; ObjectID = "19"; */
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "19"; */
 "19.title" = "視窗";
 
-/* Class = "NSMenu"; title = "視窗"; ObjectID = "24"; */
+/* Class = "NSMenu"; title = "Window"; ObjectID = "24"; */
 "24.title" = "視窗";
 
 /* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
 "29.title" = "AMainMenu";
 
-/* Class = "NSMenuItem"; title = "數獨"; ObjectID = "56"; */
+/* Class = "NSMenuItem"; title = "Sudoku"; ObjectID = "56"; */
 "56.title" = "數獨";
 
-/* Class = "NSMenu"; title = "數獨"; ObjectID = "57"; */
+/* Class = "NSMenu"; title = "Sudoku"; ObjectID = "57"; */
 "57.title" = "數獨";
 
-/* Class = "NSMenuItem"; title = "關於數獨"; ObjectID = "58"; */
+/* Class = "NSMenuItem"; title = "About sudoku"; ObjectID = "58"; */
 "58.title" = "關於數獨";
 
-/* Class = "NSMenuItem"; title = "偏好設定…"; ObjectID = "129"; */
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "129"; */
 "129.title" = "偏好設定…";
 
-/* Class = "NSMenu"; title = "服務"; ObjectID = "130"; */
+/* Class = "NSMenu"; title = "Services"; ObjectID = "130"; */
 "130.title" = "服務";
 
-/* Class = "NSMenuItem"; title = "服務"; ObjectID = "131"; */
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "131"; */
 "131.title" = "服務";
 
-/* Class = "NSMenuItem"; title = "隱藏 數獨"; ObjectID = "134"; */
+/* Class = "NSMenuItem"; title = "Hide sudoku"; ObjectID = "134"; */
 "134.title" = "隱藏 數獨";
 
-/* Class = "NSMenuItem"; title = "結束 數獨"; ObjectID = "136"; */
+/* Class = "NSMenuItem"; title = "Quit sudoku"; ObjectID = "136"; */
 "136.title" = "結束 數獨";
 
-/* Class = "NSMenuItem"; title = "隱藏其他"; ObjectID = "145"; */
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "145"; */
 "145.title" = "隱藏其他";
 
-/* Class = "NSMenuItem"; title = "顯示全部"; ObjectID = "150"; */
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "150"; */
 "150.title" = "顯示全部";
 
-/* Class = "NSMenuItem"; title = "縮放"; ObjectID = "239"; */
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "239"; */
 "239.title" = "縮放";
 
-/* Class = "NSWindow"; title = "數獨"; ObjectID = "371"; */
+/* Class = "NSWindow"; title = "Sudoku"; ObjectID = "371"; */
 "371.title" = "數獨";
 
-/* Class = "NSMenuItem"; title = "輔助說明"; ObjectID = "490"; */
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "490"; */
 "490.title" = "輔助說明";
 
-/* Class = "NSMenu"; title = "輔助說明"; ObjectID = "491"; */
+/* Class = "NSMenu"; title = "Help"; ObjectID = "491"; */
 "491.title" = "輔助說明";
 
 /* Class = "NSMenuItem"; title = "Tim Help"; ObjectID = "492"; */
 "492.title" = "Tim Help";
 
-/* Class = "NSMenuItem"; title = "縮到最小"; ObjectID = "537"; */
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "537"; */
 "537.title" = "縮到最小";
 
-/* Class = "NSMenu"; title = "等級"; ObjectID = "CoV-4E-aAE"; */
+/* Class = "NSMenu"; title = "Level"; ObjectID = "CoV-4E-aAE"; */
 "CoV-4E-aAE.title" = "等級";
 
-/* Class = "NSMenuItem"; title = "等級"; ObjectID = "DuT-i1-kOC"; */
+/* Class = "NSMenuItem"; title = "Level"; ObjectID = "DuT-i1-kOC"; */
 "DuT-i1-kOC.title" = "等級";
 
-/* Class = "NSMenuItem"; title = "非常易"; ObjectID = "LAo-iv-5Ed"; */
+/* Class = "NSMenuItem"; title = "Very Easy"; ObjectID = "LAo-iv-5Ed"; */
 "LAo-iv-5Ed.title" = "非常易";
 
-/* Class = "NSMenuItem"; title = "檢查"; ObjectID = "Lif-8b-VPG"; */
+/* Class = "NSMenuItem"; title = "Check"; ObjectID = "Lif-8b-VPG"; */
 "Lif-8b-VPG.title" = "檢查";
 
-/* Class = "NSMenuItem"; title = "易"; ObjectID = "LpP-UH-XH1"; */
+/* Class = "NSMenuItem"; title = "Easy"; ObjectID = "LpP-UH-XH1"; */
 "LpP-UH-XH1.title" = "易";
 
-/* Class = "NSTextFieldCell"; title = "開新遊戲或下一次才生效"; ObjectID = "SyA-3o-sEE"; */
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "NdH-0Z-cjr"; */
+"NdH-0Z-cjr.title" = "Edit";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "Rv7-yQ-f0w"; */
+"Rv7-yQ-f0w.title" = "Redo";
+
+/* Class = "NSTextFieldCell"; title = "Start New Game or Start on Next"; ObjectID = "SyA-3o-sEE"; */
 "SyA-3o-sEE.title" = "開新遊戲或下一次才生效";
 
-/* Class = "NSMenuItem"; title = "遊戲"; ObjectID = "T2b-Rz-2da"; */
+/* Class = "NSMenuItem"; title = "Game"; ObjectID = "T2b-Rz-2da"; */
 "T2b-Rz-2da.title" = "遊戲";
 
-/* Class = "NSMenu"; title = "檢查"; ObjectID = "X9N-Ht-a0U"; */
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "VwV-Gx-Ruu"; */
+"VwV-Gx-Ruu.title" = "編輯";
+
+/* Class = "NSMenu"; title = "Check"; ObjectID = "X9N-Ht-a0U"; */
 "X9N-Ht-a0U.title" = "檢查";
 
-/* Class = "NSMenuItem"; title = "提示"; ObjectID = "Znc-l9-hxP"; */
+/* Class = "NSMenuItem"; title = "Show Hint"; ObjectID = "Znc-l9-hxP"; */
 "Znc-l9-hxP.title" = "提示";
 
-/* Class = "NSWindow"; title = "New Game Sheets"; ObjectID = "fB7-fr-5RV"; */
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "aVv-kd-F9b"; */
+"aVv-kd-F9b.title" = "Undo";
+
+/* Class = "NSWindow"; title = "NewGameSheets"; ObjectID = "fB7-fr-5RV"; */
 "fB7-fr-5RV.title" = "New Game Sheets";
 
-/* Class = "NSMenuItem"; title = "中"; ObjectID = "fkj-jN-G1M"; */
+/* Class = "NSMenuItem"; title = "Medium"; ObjectID = "fkj-jN-G1M"; */
 "fkj-jN-G1M.title" = "中";
 
-/* Class = "NSMenu"; title = "自動"; ObjectID = "i6j-aV-l8t"; */
+/* Class = "NSMenu"; title = "Auto"; ObjectID = "i6j-aV-l8t"; */
 "i6j-aV-l8t.title" = "自動";
 
-/* Class = "NSMenuItem"; title = "自動"; ObjectID = "mlz-2c-Je8"; */
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "mlz-2c-Je8"; */
 "mlz-2c-Je8.title" = "自動";
 
-/* Class = "NSMenuItem"; title = "檢查"; ObjectID = "mmg-n9-MDS"; */
+/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "mmg-n9-MDS"; */
 "mmg-n9-MDS.title" = "檢查";
 
-/* Class = "NSButtonCell"; title = "新遊戲"; ObjectID = "mwH-ki-x6j"; */
+/* Class = "NSButtonCell"; title = "New Game"; ObjectID = "mwH-ki-x6j"; */
 "mwH-ki-x6j.title" = "新遊戲";
 
-/* Class = "NSMenuItem"; title = "新"; ObjectID = "n1g-9v-6ed"; */
+/* Class = "NSMenuItem"; title = "New"; ObjectID = "n1g-9v-6ed"; */
 "n1g-9v-6ed.title" = "新";
 
-/* Class = "NSButtonCell"; title = "下一次"; ObjectID = "ojL-NY-LuB"; */
+/* Class = "NSButtonCell"; title = "Start Next"; ObjectID = "ojL-NY-LuB"; */
 "ojL-NY-LuB.title" = "下一次";
 
-/* Class = "NSMenuItem"; title = "難"; ObjectID = "qRs-tR-dQ8"; */
+/* Class = "NSMenuItem"; title = "Hard"; ObjectID = "qRs-tR-dQ8"; */
 "qRs-tR-dQ8.title" = "難";
 
-/* Class = "NSMenu"; title = "遊戲"; ObjectID = "u7q-Y0-DYQ"; */
+/* Class = "NSMenu"; title = "Game"; ObjectID = "u7q-Y0-DYQ"; */
 "u7q-Y0-DYQ.title" = "遊戲";
 
-/* Class = "NSMenuItem"; title = "非常難"; ObjectID = "wZ2-QP-Hjq"; */
+/* Class = "NSMenuItem"; title = "Very Hard"; ObjectID = "wZ2-QP-Hjq"; */
 "wZ2-QP-Hjq.title" = "非常難";
 
-/* Class = "NSMenuItem"; title = "檢查"; ObjectID = "yvK-HQ-PiB"; */
+/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "yvK-HQ-PiB"; */
 "yvK-HQ-PiB.title" = "檢查";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "sFc-ak-deX"; */
+"sFc-ak-deX.title" = "偏好設定";
+
+/* Class = "NSButtonCell"; title = "Show All Hint"; ObjectID = "854-4P-UgG"; */
+"854-4P-UgG.title" = "Show All Hint";
+
+/* Class = "NSButtonCell"; title = "Show Next Time"; ObjectID = "8X7-gX-8eV"; */
+"8X7-gX-8eV.title" = "Show Next Time";
+
+/* Class = "NSButtonCell"; title = "Show Dialog for Select Level"; ObjectID = "CBT-gR-kMv"; */
+"CBT-gR-kMv.title" = "Show Dialog for Select Level";
+
+/* Class = "NSTextFieldCell"; title = "Start New Game or Start on Next"; ObjectID = "SyA-3o-sEE"; */
+"SyA-3o-sEE.title" = "Start New Game or Start on Next";
+
+/* Class = "NSButtonCell"; title = "Increase Difficultly"; ObjectID = "i8Z-tL-ZXu"; */
+"i8Z-tL-ZXu.title" = "Increase Difficultly";
+
+/* Class = "NSButtonCell"; title = "Auto Check Correct"; ObjectID = "De4-lV-gP9"; */
+"De4-lV-gP9.title" = "Auto Check Correct";
+
+

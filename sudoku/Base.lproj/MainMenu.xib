@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
@@ -26,7 +26,11 @@
                             <menuItem isSeparatorItem="YES" id="236">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Preferences…" keyEquivalent="," id="129"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="129">
+                                <connections>
+                                    <action selector="makeKeyAndOrderFront:" target="sFc-ak-deX" id="f85-E6-rFP"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="143">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -123,14 +127,14 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="VwV-Gx-Ruu">
                         <items>
-                            <menuItem title="Undo" keyEquivalent="z" id="aVv-kd-F9b">
-                                <connections>
-                                    <action selector="undo:" target="-1" id="OEI-Y9-psl"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Redo" keyEquivalent="Z" id="Rv7-yQ-f0w">
                                 <connections>
-                                    <action selector="redo:" target="-1" id="y7i-Vm-sTB"/>
+                                    <action selector="redo:" target="-1" id="DRk-Si-hbk"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Undo" keyEquivalent="z" id="aVv-kd-F9b">
+                                <connections>
+                                    <action selector="undo:" target="-1" id="ao5-0l-ksO"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -140,31 +144,12 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Check" id="X9N-Ht-a0U">
                         <items>
-                            <menuItem title="Check Correct" keyEquivalent="c" id="yvK-HQ-PiB">
+                            <menuItem title="Correct" keyEquivalent="c" id="yvK-HQ-PiB">
                                 <connections>
                                     <action selector="checkcorrectonlyselect:" target="494" id="IvT-Hv-QU4"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="kZW-Co-XOl"/>
-                            <menuItem title="Auto" id="mlz-2c-Je8">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Auto" id="i6j-aV-l8t">
-                                    <items>
-                                        <menuItem title="Check Correct" id="mmg-n9-MDS">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="checkcorrect:" target="494" id="tLW-MS-Tlp"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Show Hint" id="Znc-l9-hxP">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="showhint:" target="494" id="70u-1E-bDj"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
+                            <menuItem title="Hint" keyEquivalent="h" id="H1t-hp-q1y"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -230,18 +215,21 @@
                     <constraint firstAttribute="trailing" secondItem="539" secondAttribute="trailing" id="p97-a1-rDB"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="439" y="-81"/>
+            <point key="canvasLocation" x="437" y="-29"/>
         </window>
         <customObject id="494" customClass="AppDelegate" customModule="Sudoku" customModuleProvider="target">
             <connections>
                 <outlet property="changeLevelSheet" destination="fB7-fr-5RV" id="2zX-AC-Typ"/>
-                <outlet property="menuautocheck" destination="mmg-n9-MDS" id="ILV-sr-EcT"/>
                 <outlet property="menueasy" destination="LpP-UH-XH1" id="6s5-Qb-odl"/>
                 <outlet property="menuhard" destination="qRs-tR-dQ8" id="W5w-rQ-cxp"/>
-                <outlet property="menuhint" destination="Znc-l9-hxP" id="SBb-NM-FRA"/>
                 <outlet property="menumed" destination="fkj-jN-G1M" id="Md7-bW-PqG"/>
                 <outlet property="menuveryeasy" destination="LAo-iv-5Ed" id="aFI-gX-awE"/>
                 <outlet property="menuveryhard" destination="wZ2-QP-Hjq" id="hSY-Hj-hc5"/>
+                <outlet property="pref_autocheck" destination="De4-lV-gP9" id="qFo-6I-KQ8"/>
+                <outlet property="pref_increaseDiff" destination="1ut-ad-2c8" id="OLD-hE-neJ"/>
+                <outlet property="pref_showhint" destination="aUM-f1-Fef" id="8Iv-Yw-wsx"/>
+                <outlet property="pref_showselectleveldialog" destination="YS9-6S-tHp" id="3I7-1E-cfW"/>
+                <outlet property="showDialognexttime" destination="hZt-XZ-oVJ" id="NNM-ak-4dI"/>
                 <outlet property="skView" destination="539" id="540"/>
             </connections>
         </customObject>
@@ -282,9 +270,71 @@
                             </connections>
                         </buttonCell>
                     </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hZt-XZ-oVJ">
+                        <rect key="frame" x="151" y="-2" width="151" height="18"/>
+                        <buttonCell key="cell" type="check" title="Show Next Time" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8X7-gX-8eV">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="newGamedialogshowchange:" target="494" id="BLV-b7-QJv"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="414" y="-495"/>
+        </window>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="sFc-ak-deX" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES"/>
+            <rect key="contentRect" x="718" y="496" width="276" height="114"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+            <view key="contentView" id="chL-pN-pVW">
+                <rect key="frame" x="0.0" y="0.0" width="276" height="114"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z4A-EE-C76">
+                        <rect key="frame" x="18" y="58" width="142" height="18"/>
+                        <buttonCell key="cell" type="check" title="Auto Check Correct" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="De4-lV-gP9">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoCorrect:" target="494" id="F7m-qY-JDU"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aUM-f1-Fef">
+                        <rect key="frame" x="18" y="38" width="103" height="18"/>
+                        <buttonCell key="cell" type="check" title="Show All Hint" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="854-4P-UgG">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoHint:" target="494" id="ged-FD-iwc"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YS9-6S-tHp">
+                        <rect key="frame" x="18" y="18" width="195" height="18"/>
+                        <buttonCell key="cell" type="check" title="Show Dialog for Select Level" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="CBT-gR-kMv">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="showDialogselectlevel:" target="494" id="eiW-EF-Sa4"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ut-ad-2c8">
+                        <rect key="frame" x="18" y="78" width="135" height="18"/>
+                        <buttonCell key="cell" type="check" title="Increase Difficultly" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="i8Z-tL-ZXu">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="incDiff:" target="494" id="z7z-jf-J46"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="630" y="14"/>
         </window>
     </objects>
 </document>

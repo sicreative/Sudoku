@@ -11,10 +11,11 @@ import SpriteKit
 
 class SudokuBoxSKNode: SKNode {
     
+ let editingStrokeColor = SKColor.blackColor()
  let noneditColor = SKColor.blackColor()
  let editCorrectColor = NSColor(red:0.3,green:0.45,blue:0.24,alpha:1)
  let editInCorrectColor = SKColor.blueColor()
- let strokeColor  = SKColor.redColor()
+ let strokeColor  = NSColor(red:0.8,green:0.1,blue:0.1,alpha:0.8)
  var correctChangeColor = false;
     
   
@@ -40,6 +41,9 @@ class SudokuBoxSKNode: SKNode {
     }
  
     
+   
+ 
+    
     func setNumValue (num:Int,_ edit:Bool){
         self.setNumValue(num, edit,true)
     }
@@ -62,13 +66,14 @@ class SudokuBoxSKNode: SKNode {
         
         if (!edit) {
             lablenode.fontColor = noneditColor
+     
             if (num != 0){
                 lablenode.text = String ( num )
             }
         }
         else{
             lablenode.fontColor = editInCorrectColor
-            if (Runtime.isDebug()){
+          
                 if (fillednum == 0){
                     
                     lablenode.text = ""
@@ -78,7 +83,7 @@ class SudokuBoxSKNode: SKNode {
                     lablenode.text = String (fillednum)
                    
                 }
-            }
+            
             
         }
         
@@ -87,6 +92,7 @@ class SudokuBoxSKNode: SKNode {
         }
         
         checkcorrect()
+        
     }
     
     
@@ -97,8 +103,12 @@ class SudokuBoxSKNode: SKNode {
         let lablenode = SKLabelNode()
         
         self.userInteractionEnabled = true;
-  
-        userData = ["id":id]
+        userData = ["id": id]
+        //userData = ["selectedbox":  -1]
+
+//        userData =
+    //    userData!["id"] = id
+        
     //    userData!["editable"] = edit
    //     userData!["correctnum"] = num
         
@@ -140,7 +150,7 @@ class SudokuBoxSKNode: SKNode {
         
         shapenode.name = "1"
         shapenode.path = drawpath;
-        shapenode.strokeColor = SKColor .redColor()
+        shapenode.strokeColor = strokeColor
        // shapenode.fillColor = noneditColor
         shapenode.lineWidth = 10
         shapenode.lineJoin = CGLineJoin.Round
@@ -159,14 +169,17 @@ class SudokuBoxSKNode: SKNode {
         //shapenode.runAction(SKAction.repeatActionForever(action))
         // shapenode.runAction(action)
     
-       
+       updatetextfadeIn()
     }
     
     
     
- 
    
     override func mouseDown(theEvent: NSEvent) {
+        
+        if ((scene! as! GameScene).isShowNextGame){
+            return
+        }
         
         if (!isEditable()) {
             return
@@ -175,7 +188,7 @@ class SudokuBoxSKNode: SKNode {
         let node  = self.children[0]
         if node is SKShapeNode {
         let shapenode = node as! SKShapeNode
-            if shapenode.strokeColor == noneditColor{
+            if shapenode.strokeColor == editingStrokeColor{
                 return
             }
         
@@ -184,20 +197,65 @@ class SudokuBoxSKNode: SKNode {
                 if (selectedbox as! Int != -1){
                 let sbnode = scene!.children[selectedbox as! Int] as! SudokuBoxSKNode
                 
-                let insidenode = sbnode.children[0] as! SKShapeNode
-                    insidenode.strokeColor = strokeColor
-                    
+              //  let insidenode = sbnode.children[0] as! SudokuBoxSKNode
+                    sbnode.setDeselected()
                 }
                 
                     
                 
                 
-                    shapenode.strokeColor = noneditColor
+                   setSelected()
                     scene!.userData!["selectedbox"] = userData!["id"]
             }
         }
         
-           }
+    }
+    
+    
+
+    
+    
+    
+    func undochangetext(num : Int){
+        
+        
+        
+        
+        
+        let undoM =        self.scene!.view!.window!.undoManager!
+        
+        
+        
+        let id = (userData!["id"] as! Int) - 9
+        
+        
+        (undoM.prepareWithInvocationTarget(self)).undochangetext(userData!["fillednum"] as! Int)
+      
+        
+  undoM.setActionName(String (format: NSLocalizedString("undochangetext", comment: "Menu Undo Text"),id%9+1,id/9+1))
+
+        
+        if (userData!["fillednum"] as! Int == 0){
+            ++(self.scene as! GameScene).numfilledBox
+        }
+        
+        userData!["fillednum"] = num
+        
+        let node = self.children[0].children[0] as! SKLabelNode
+       
+        
+        if (num==0){
+        node.text = ""
+            --(self.scene as! GameScene).numfilledBox
+        }else{
+        node.text = String (num)
+        }
+        
+        checkcorrect()
+        updatehint()
+
+    }
+
     
     func changetext(theEvent: NSEvent)->Bool{
         if let num = Int (theEvent.characters!) {
@@ -205,9 +263,41 @@ class SudokuBoxSKNode: SKNode {
                 return false
             }
             
+            
+        
+           // let undo : NSUndoManager = (self.parent as! GameScene).windowWillReturnUndoManager()!
+            let undoM =        self.scene!.view!.window!.undoManager!
+            
+           
+            
+            let id = (userData!["id"] as! Int) - 9
+            
+           
+            
+            (undoM.prepareWithInvocationTarget(self)).undochangetext(userData!["fillednum"] as! Int)
+            undoM.setActionName(String (format: NSLocalizedString("undochangetext", comment: "Menu Undo Text"),id%9+1,id/9+1))
+           
+            
+      
+            
+            
+            
+            
+     
+   
+            
+       
+            
             userData!["fillednum"] = num
             
             let node = self.children[0].children[0] as! SKLabelNode
+            
+            
+            
+            
+            
+            
+            
             // var fillingarray = scene!.userData?["fillingarray"] as! [[Int]]
             //let x = (userData!["id"] as! Int - 9) / 9
             //let y = userData!["id"] as! Int % 9
@@ -284,7 +374,7 @@ class SudokuBoxSKNode: SKNode {
     func setSelected(){
         
         let insidenode = self.children[0] as! SKShapeNode
-        insidenode.strokeColor = noneditColor
+        insidenode.strokeColor = editingStrokeColor
         
     
     }
@@ -304,14 +394,19 @@ class SudokuBoxSKNode: SKNode {
     }
     
     func isCorrect() -> Bool{
-        let node = self.children[0].children[0] as! SKLabelNode
+        //let node = self.children[0].children[0] as! SKLabelNode
         
-        if (node.text == nil){
-         return false
-        }
+       // if (node.text == nil){
+        // return false
+//}
         
-       let num =  Int (node.text!)
+       let num = userData!["fillednum"] as! Int
+        
+     //  let num =  Int (node.text!)
        
+        if num == 0 {
+            return false
+        }
         
         if num == (userData!["correctnum"] as! Int) {
             return true
@@ -331,13 +426,19 @@ class SudokuBoxSKNode: SKNode {
     func updatehint(){
         
         
+        
+        
+     
+        
         if self.children[0].children.count > 1 {
             
-            
+         
             
             for _ in 1...self.children[0].children.count-1{
                 self.children[0].children[1].removeFromParent()
             }
+            
+            
             
         }
         
@@ -448,10 +549,21 @@ class SudokuBoxSKNode: SKNode {
         }
         
     
+        if self.children[0].children[0].hasActions() {
+            updatetextfadeIn()
+        }
         
         
+    }
+    
+    func updatetextfadeIn(){
+         let nodes = self.children[0].children
         
-        
+        for node in nodes {
+        node.alpha = 0
+        node.removeAllActions()
+        node.runAction(SKAction.fadeInWithDuration(1.2))
+        }
     }
 
 

@@ -11,11 +11,11 @@
 /* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
 "29.title" = "AMainMenu";
 
-/* Class = "NSMenuItem"; title = "sudoku"; ObjectID = "56"; */
-"56.title" = "sudoku";
+/* Class = "NSMenuItem"; title = "Sudoku"; ObjectID = "56"; */
+"56.title" = "Sudoku";
 
-/* Class = "NSMenu"; title = "sudoku"; ObjectID = "57"; */
-"57.title" = "sudoku";
+/* Class = "NSMenu"; title = "Sudoku"; ObjectID = "57"; */
+"57.title" = "Sudoku";
 
 /* Class = "NSMenuItem"; title = "About sudoku"; ObjectID = "58"; */
 "58.title" = "About sudoku";
@@ -44,8 +44,8 @@
 /* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "239"; */
 "239.title" = "Zoom";
 
-/* Class = "NSWindow"; title = "sudoku"; ObjectID = "371"; */
-"371.title" = "sudoku";
+/* Class = "NSWindow"; title = "Sudoku"; ObjectID = "371"; */
+"371.title" = "Sudoku";
 
 /* Class = "NSMenuItem"; title = "Help"; ObjectID = "490"; */
 "490.title" = "Help";
@@ -59,8 +59,20 @@
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "537"; */
 "537.title" = "Minimize";
 
+/* Class = "NSButtonCell"; title = "Show All Hint"; ObjectID = "854-4P-UgG"; */
+"854-4P-UgG.title" = "Show All Hint";
+
+/* Class = "NSButtonCell"; title = "Show Next Time"; ObjectID = "8X7-gX-8eV"; */
+"8X7-gX-8eV.title" = "Show Next Time";
+
+/* Class = "NSButtonCell"; title = "Show Dialog for Select Level"; ObjectID = "CBT-gR-kMv"; */
+"CBT-gR-kMv.title" = "Show Dialog for Select Level";
+
 /* Class = "NSMenu"; title = "Level"; ObjectID = "CoV-4E-aAE"; */
 "CoV-4E-aAE.title" = "Level";
+
+/* Class = "NSButtonCell"; title = "Auto Check Correct"; ObjectID = "De4-lV-gP9"; */
+"De4-lV-gP9.title" = "Auto Check Correct";
 
 /* Class = "NSMenuItem"; title = "Level"; ObjectID = "DuT-i1-kOC"; */
 "DuT-i1-kOC.title" = "Level";
@@ -74,8 +86,20 @@
 /* Class = "NSMenuItem"; title = "Easy"; ObjectID = "LpP-UH-XH1"; */
 "LpP-UH-XH1.title" = "Easy";
 
-/* Class = "NSMenuItem"; title = "New"; ObjectID = "T2b-Rz-2da"; */
-"T2b-Rz-2da.title" = "New";
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "NdH-0Z-cjr"; */
+"NdH-0Z-cjr.title" = "Edit";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "Rv7-yQ-f0w"; */
+"Rv7-yQ-f0w.title" = "Redo";
+
+/* Class = "NSTextFieldCell"; title = "Start New Game or Start on Next"; ObjectID = "SyA-3o-sEE"; */
+"SyA-3o-sEE.title" = "Start New Game or Start on Next";
+
+/* Class = "NSMenuItem"; title = "Game"; ObjectID = "T2b-Rz-2da"; */
+"T2b-Rz-2da.title" = "Game";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "VwV-Gx-Ruu"; */
+"VwV-Gx-Ruu.title" = "Edit";
 
 /* Class = "NSMenu"; title = "Check"; ObjectID = "X9N-Ht-a0U"; */
 "X9N-Ht-a0U.title" = "Check";
@@ -83,11 +107,20 @@
 /* Class = "NSMenuItem"; title = "Show Hint"; ObjectID = "Znc-l9-hxP"; */
 "Znc-l9-hxP.title" = "Show Hint";
 
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "aVv-kd-F9b"; */
+"aVv-kd-F9b.title" = "Undo";
+
+/* Class = "NSWindow"; title = "NewGameSheets"; ObjectID = "fB7-fr-5RV"; */
+"fB7-fr-5RV.title" = "NewGameSheets";
+
 /* Class = "NSMenuItem"; title = "Medium"; ObjectID = "fkj-jN-G1M"; */
 "fkj-jN-G1M.title" = "Medium";
 
 /* Class = "NSMenu"; title = "Auto"; ObjectID = "i6j-aV-l8t"; */
 "i6j-aV-l8t.title" = "Auto";
+
+/* Class = "NSButtonCell"; title = "Increase Difficultly"; ObjectID = "i8Z-tL-ZXu"; */
+"i8Z-tL-ZXu.title" = "Increase Difficultly";
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "mlz-2c-Je8"; */
 "mlz-2c-Je8.title" = "Auto";
@@ -95,14 +128,23 @@
 /* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "mmg-n9-MDS"; */
 "mmg-n9-MDS.title" = "Check Correct";
 
+/* Class = "NSButtonCell"; title = "New Game"; ObjectID = "mwH-ki-x6j"; */
+"mwH-ki-x6j.title" = "New Game";
+
 /* Class = "NSMenuItem"; title = "New"; ObjectID = "n1g-9v-6ed"; */
 "n1g-9v-6ed.title" = "New";
+
+/* Class = "NSButtonCell"; title = "Start Next"; ObjectID = "ojL-NY-LuB"; */
+"ojL-NY-LuB.title" = "Start Next";
 
 /* Class = "NSMenuItem"; title = "Hard"; ObjectID = "qRs-tR-dQ8"; */
 "qRs-tR-dQ8.title" = "Hard";
 
-/* Class = "NSMenu"; title = "New"; ObjectID = "u7q-Y0-DYQ"; */
-"u7q-Y0-DYQ.title" = "New";
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "sFc-ak-deX"; */
+"sFc-ak-deX.title" = "Preferences";
+
+/* Class = "NSMenu"; title = "Game"; ObjectID = "u7q-Y0-DYQ"; */
+"u7q-Y0-DYQ.title" = "Game";
 
 /* Class = "NSMenuItem"; title = "Very Hard"; ObjectID = "wZ2-QP-Hjq"; */
 "wZ2-QP-Hjq.title" = "Very Hard";

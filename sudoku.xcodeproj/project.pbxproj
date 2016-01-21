@@ -23,6 +23,9 @@
 		61BF05BD1C4035880087C9AC /* Sudoku_card+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BF05BB1C4035880087C9AC /* Sudoku_card+CoreDataProperties.swift */; };
 		61BF05BE1C4035880087C9AC /* Sudoku_card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BF05BC1C4035880087C9AC /* Sudoku_card.swift */; };
 		61CB4FD01C39B246008ECC43 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 61CB4FCE1C39B246008ECC43 /* Model.xcdatamodeld */; };
+		61CD72DD1C4D1BDC00B37C41 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61CD72DF1C4D1BDC00B37C41 /* InfoPlist.strings */; };
+		61CD72E21C4D1BDC00B37C41 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61CD72E41C4D1BDC00B37C41 /* InfoPlist.strings */; };
+		61CD72E71C4D1BDD00B37C41 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61CD72E91C4D1BDD00B37C41 /* Localizable.strings */; };
 		61F8821F1C4916760010ED5D /* ConcurrencySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F8821E1C4916760010ED5D /* ConcurrencySupport.swift */; };
 		61FDABD01C3F0B3A004AB634 /* Sudoku_table+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FDABCE1C3F0B3A004AB634 /* Sudoku_table+CoreDataProperties.swift */; };
 		61FDABD11C3F0B3A004AB634 /* Sudoku_table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FDABCF1C3F0B3A004AB634 /* Sudoku_table.swift */; };
@@ -46,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		612BBA101C4FF143003BCD11 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainMenu.strings"; sourceTree = "<group>"; };
+		612BBA141C4FF4F5003BCD11 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		614F6CB91C4B9B2800810CE8 /* Sudoku_restore+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sudoku_restore+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		614F6CBA1C4B9B2800810CE8 /* Sudoku_restore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sudoku_restore.swift; sourceTree = "<group>"; };
 		614F92F51C3D843900E098E9 /* CoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreController.swift; sourceTree = "<group>"; };
@@ -68,10 +73,13 @@
 		61795BDA1C36D04500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		61795BDC1C36D0FD00DF6C96 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "sudoku/zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		61795BDE1C36D10500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = sudoku/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		61A2033F1C3C49DD005C1404 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainMenu.strings"; sourceTree = "<group>"; };
 		61BF05BB1C4035880087C9AC /* Sudoku_card+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Sudoku_card+CoreDataProperties.swift"; path = "../Sudoku_card+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61BF05BC1C4035880087C9AC /* Sudoku_card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sudoku_card.swift; path = ../Sudoku_card.swift; sourceTree = "<group>"; };
 		61CB4FCF1C39B246008ECC43 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		61CD72DE1C4D1BDC00B37C41 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		61CD72E31C4D1BDC00B37C41 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		61CD72E81C4D1BDD00B37C41 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		61CD72EC1C4D1D1200B37C41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61F8821E1C4916760010ED5D /* ConcurrencySupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrencySupport.swift; sourceTree = "<group>"; };
 		61FDABCE1C3F0B3A004AB634 /* Sudoku_table+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sudoku_table+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61FDABCF1C3F0B3A004AB634 /* Sudoku_table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sudoku_table.swift; sourceTree = "<group>"; };
@@ -105,6 +113,7 @@
 		6175B9711C25F1B6007A40C9 = {
 			isa = PBXGroup;
 			children = (
+				61CD72E91C4D1BDD00B37C41 /* Localizable.strings */,
 				61CB4FCE1C39B246008ECC43 /* Model.xcdatamodeld */,
 				6175B97C1C25F1B6007A40C9 /* Sudoku */,
 				6175B9901C25F1B6007A40C9 /* sudokuTests */,
@@ -153,6 +162,7 @@
 		6175B9901C25F1B6007A40C9 /* sudokuTests */ = {
 			isa = PBXGroup;
 			children = (
+				61CD72DF1C4D1BDC00B37C41 /* InfoPlist.strings */,
 				6175B9911C25F1B6007A40C9 /* sudokuTests.swift */,
 				6175B9931C25F1B6007A40C9 /* Info.plist */,
 			);
@@ -162,6 +172,7 @@
 		6175B99B1C25F1B6007A40C9 /* sudokuUITests */ = {
 			isa = PBXGroup;
 			children = (
+				61CD72E41C4D1BDC00B37C41 /* InfoPlist.strings */,
 				6175B99C1C25F1B6007A40C9 /* sudokuUITests.swift */,
 				6175B99E1C25F1B6007A40C9 /* Info.plist */,
 			);
@@ -273,6 +284,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61CD72E71C4D1BDD00B37C41 /* Localizable.strings in Resources */,
 				6175B9841C25F1B6007A40C9 /* Assets.xcassets in Resources */,
 				61795BDD1C36D0FD00DF6C96 /* InfoPlist.strings in Resources */,
 				6175B9821C25F1B6007A40C9 /* GameScene.sks in Resources */,
@@ -284,6 +296,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61CD72DD1C4D1BDC00B37C41 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +304,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61CD72E21C4D1BDC00B37C41 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +367,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				6175B9861C25F1B6007A40C9 /* Base */,
-				61A2033F1C3C49DD005C1404 /* zh-Hant */,
+				612BBA101C4FF143003BCD11 /* zh-Hant */,
+				612BBA141C4FF4F5003BCD11 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -374,6 +389,31 @@
 			);
 			name = InfoPlist.strings;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		61CD72DF1C4D1BDC00B37C41 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61CD72DE1C4D1BDC00B37C41 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		61CD72E41C4D1BDC00B37C41 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61CD72E31C4D1BDC00B37C41 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		61CD72E91C4D1BDD00B37C41 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61CD72E81C4D1BDD00B37C41 /* zh-Hant */,
+				61CD72EC1C4D1D1200B37C41 /* Base */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

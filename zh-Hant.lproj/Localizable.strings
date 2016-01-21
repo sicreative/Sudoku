@@ -1,0 +1,6 @@
+/* Next Game Show Text */
+"nextgametext" = " 下一遊戲 ";
+
+/* Menu Undo Text */
+"undochangetext" = " 行 %d 列 %d ";
+
