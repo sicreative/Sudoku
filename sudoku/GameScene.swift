@@ -17,6 +17,18 @@ import GameKit
 
 class GameScene: SKScene {
     
+    
+    
+    static var editingStrokeColor = SKColor.blackColor()
+    static var noneditColor = SKColor.blackColor()
+    static var editCorrectColor = SKColor(red:0.3,green:0.45,blue:0.24,alpha:1)
+    static var editInCorrectColor = SKColor.blueColor()
+    static var strokeColor  = SKColor(red:0.8,green:0.1,blue:0.1,alpha:0.8)
+    static var bigframecolor = SKColor(red:0.2,green:0.2,blue:0.2,alpha:0.7)
+    static var hintcolor = SKColor(red:0.95,green:0.8,blue:0.9,alpha:1)
+    
+    
+    
     let finishedboxfilledColor = NSColor(red:0.8,green:0.8,blue:0.24,alpha:0.8)
     let finishedboxtextColor = NSColor(red:0.2,green:0.2,blue:0.2,alpha:0.8)
     static let MAXLEVEL = 60
@@ -26,10 +38,10 @@ class GameScene: SKScene {
     var appDelegate : AppDelegate!
    
     
-    private let concurrencySudokuQueue = dispatch_queue_create(
-        NSBundle.mainBundle().bundleIdentifier!+".SudokuQueue", DISPATCH_QUEUE_CONCURRENT)
+  //  private let concurrencySudokuQueue = dispatch_queue_create(
+  //      NSBundle.mainBundle().bundleIdentifier!+".SudokuQueue", DISPATCH_QUEUE_CONCURRENT)
     
-    private let concurrencySudokuBackGroundQueue = dispatch_queue_create(NSBundle.mainBundle().bundleIdentifier!+".SudokuBackGroundQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, 0))
+   private let concurrencySudokuBackGroundQueue = dispatch_queue_create(NSBundle.mainBundle().bundleIdentifier!+".SudokuBackGroundQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, 0))
     
   //  private var dispatch_source_finished_buildsudoku : dispatch_source_t!
     
@@ -68,7 +80,7 @@ class GameScene: SKScene {
     var selectedlevelchangenexttime = false;
 
    
-    var performance = [String:AnyObject]()
+    var preference = [String:AnyObject]()
     
     //var numarray:[[Int64]] = []
     
@@ -78,8 +90,8 @@ class GameScene: SKScene {
     // MARK: - Level
     
     
-    func levelresettoperformance(){
-        level = preferenceleveltolevel(performance["selectedgamelevel"] as! Int)
+    func levelresettopreference(){
+        level = preferenceleveltolevel(preference["selectedgamelevel"] as! Int)
         selectedlevelchangenexttime = true
         AppDelegate.writePreference("level",level)
         
@@ -96,9 +108,9 @@ class GameScene: SKScene {
     
     func newsudoku(){
         
+        isClosingNextGame = true
         
-        
-        
+    
         
        self.scene!.view!.window!.undoManager!.removeAllActions()
         
@@ -107,13 +119,14 @@ class GameScene: SKScene {
         
         
         
-        
-      
+
 
         
         if (userData!["mixedstatemenu"] != nil){
             (userData!["mixedstatemenu"] as! NSMenuItem).state = NSOffState
-            
+            if level == preferenceleveltolevel((userData!["mixedstatemenu"] as! NSMenuItem).tag) {
+                (userData!["mixedstatemenu"] as! NSMenuItem).state = NSOnState
+            }
             userData!["mixedstatemenu"] = nil
         }
         
@@ -137,6 +150,7 @@ class GameScene: SKScene {
     }
     
     func newsudokubuildednum(){
+      
         var  numarray :[[Int]] = userData!["numarray"] as! Array
         var  fillingarray :[[Bool]] = userData!["fillingarray"] as! Array
         numTotalfillBox = 0;
@@ -154,14 +168,31 @@ class GameScene: SKScene {
                
             }
         }
-         updatetextfadeout()
+        updatetextfadeout()
         updateAllAutoCheck()
         refreshHint()
         
-       checkselectedbox()
+        checkselectedbox()
         selectnearcenter()
     
+     
         
+        for i in 0...5 {
+            if level ==  preferenceleveltolevel(i)-1{
+                buildsudokutable(true, level-1, 15.0)
+                
+                break;
+            }
+            
+        }
+   
+
+       // let int_time = dispatch_time(DISPATCH_TIME_NOW, Int64(1.5 * Double(NSEC_PER_SEC)))
+       // dispatch_after(int_time, GlobalMainQueue){
+            self.isClosingNextGame = false
+       // }
+        
+    
         
       //  self.updatehint()
     }
@@ -224,18 +255,20 @@ class GameScene: SKScene {
         var  fillingarray :[[Bool]] = [[]]
         
 
-        
-      
-        let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
+       //let qos = isRunBackGround ? QOS_CLASS_BACKGROUND : QOS_CLASS_USER_INITIATED
+        let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : dispatch_get_main_queue()
+     // let runqueue = concurrencySudokuQueue
+      //  let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
         
         let buildConcurrencyGroup = dispatch_group_create()
         
         
         if checkwiththislevel(level){
             
-            
+            if !isRunBackGround{
             readdatabasetable(level)
             newsudokubuildednum()
+            }
             
             return
         }
@@ -260,22 +293,38 @@ class GameScene: SKScene {
             }
             
         
+ 
+        
         dispatch_async(runqueue){
-                    
-                                dispatch_group_notify(buildConcurrencyGroup, self.concurrencySudokuQueue){
+            
+                                dispatch_group_notify(buildConcurrencyGroup, runqueue){
                                     
-                                    dispatch_barrier_async(runqueue){
+                                   
+                                    
+                                  //  dispatch_barrier_sync(runqueue){
       
                                      //   let  numarray :[[Int]] = self.userData!["numarray"] as! Array
                                      //   let  fillingarray :[[Bool]] = self.userData!["fillingarray"] as! Array
                                    
-                                    self.databasemodeltable(numarray,fillingarray,level)
                                         if (!isRunBackGround){
+                                            
+                                          //  dispatch_sync(dispatch_get_main_queue()){
+                                            
+                                        //    objc_sync_enter(self)
                                             self.userData!["numarray"] = numarray
                                             self.userData!["fillingarray"] = fillingarray
+
+                                            
+                                         //   objc_sync_exit(self)
+                                            
+                                            
+                                           
                                                 self.newsudokubuildednum()
-                                        
+                                          // }
+                                            return
                                         }
+                                             self.databasemodeltable(numarray,fillingarray,level)
+                                        
                                         
                                         
                                         if (Runtime.isDebug()){
@@ -283,10 +332,12 @@ class GameScene: SKScene {
                                             
                                             print ( "Finished run build sudoku level: \(level) ,background: \(isRunBackGround)")
                                         }
+                                 }
                                     //    dispatch_source_merge_data(self.dispatch_source_finished_buildsudoku, 1)
-                    }
-            }
+                    //}
+            
         
+    
             
         }
         
@@ -313,7 +364,9 @@ class GameScene: SKScene {
             return buildsudokutable(isRunBackGround,level)
         }
         
-         let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
+        let runqueue = concurrencySudokuBackGroundQueue
+        
+        // let runqueue = isRunBackGround ? concurrencySudokuBackGroundQueue : concurrencySudokuQueue
         
         let int_time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
         dispatch_after(int_time, runqueue){
@@ -981,9 +1034,12 @@ class GameScene: SKScene {
         
         tableFetch.sortDescriptors = sortDescriptors
         
+        
+       
+        
         do {
             let fetchedtable = try modelcontroller.managedObjectContext.executeFetchRequest(tableFetch) as! [Sudoku_table]
-            if Runtime.isDebug(){
+          //  if Runtime.isDebug(){
                 
                 if (fetchedtable.count > 0){
                     if (Runtime.isDebug()){
@@ -998,8 +1054,12 @@ class GameScene: SKScene {
                     
                     cardFetch.sortDescriptors = cardsortDescriptors
                     
+                    
+                      
+                    
+                    
                     do {
-                        let fetchedcard = try modelcontroller.managedObjectContext.executeFetchRequest(cardFetch) as! [Sudoku_card]
+                        let fetchedcard = try self.modelcontroller.managedObjectContext.executeFetchRequest(cardFetch) as! [Sudoku_card]
                  
                             
                             if (fetchedcard.count == 81){
@@ -1017,21 +1077,50 @@ class GameScene: SKScene {
                                     print("pos:\(fetchedcard[i].pos as! Int),num:\(fetchedcard[i].num as! Int)")
                                     }
                                 }
+                              //  objc_sync_enter(self)
+                                self.userData!["numarray"] = numarray;
+                                self.userData!["fillingarray"] = fillingarray;
+                             //   objc_sync_exit(self)
+                             
+                                let privateMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                                privateMOC.parentContext = self.modelcontroller.managedObjectContext
                                 
-                                userData!["numarray"] = numarray;
-                                userData!["fillingarray"] = fillingarray;
-                                
-                                modelcontroller.managedObjectContext.deleteObject(fetchedtable[0])
-                         
+                                privateMOC.performBlock {
+                          
+                            self.modelcontroller.managedObjectContext.deleteObject(fetchedtable[0])
+                                    do{
+                                try self.modelcontroller.managedObjectContext.save()
+                                    }catch{
+                                        
+                                    }
+                                }
 
-                                        buildsudokutable(true,self.level+1,2)
-                                
-                               try modelcontroller.managedObjectContext.save()
+                                if self.preference["increase_level"] as! Bool{
+                                    
+                                        self.buildsudokutable(true,self.level+1,2)
+                                }else
+                                {
+                                    self.buildsudokutable(true,self.level,2)
+                                    
+                                }
                                 
                                 return true
                                 
 
                             }else{
+                                
+                                let privateMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                                privateMOC.parentContext = self.modelcontroller.managedObjectContext
+                                
+                                privateMOC.performBlock {
+                                
+                                self.modelcontroller.managedObjectContext.deleteObject(fetchedtable[0])
+                                    do{
+                                try self.modelcontroller.managedObjectContext.save()
+                                    }catch{
+                                        
+                                    }
+                                }
                                 return false
                         }
                         
@@ -1041,15 +1130,17 @@ class GameScene: SKScene {
                         return false
                         // fatalError("Failed to found Sudoku_card: \(error)")
                     }
+                      
                     
                     
                 }else{
                     return false
-                }
+                        }
                 
+                        
                 
-                
-            }
+            
+        
         } catch {
             return false
             //fatalError("Failed to found Sudoku_table: \(error)")
@@ -1086,7 +1177,17 @@ class GameScene: SKScene {
         
         sudoku_table.table = NSDate()
         
+        
+        
         var pos = 0;
+        
+        
+        
+        let privateMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        privateMOC.parentContext = self.modelcontroller.managedObjectContext
+        
+        privateMOC.performBlock {
+        
         
         for i in 0...8{
             for j in 0...8{
@@ -1154,6 +1255,7 @@ class GameScene: SKScene {
             fatalError("Failure to save context: \(error)")
         }
         
+        }
         
         return sudoku_table
         
@@ -1164,13 +1266,21 @@ class GameScene: SKScene {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = NSEntityDescription.entityForName(entity, inManagedObjectContext: modelcontroller.managedObjectContext)
         fetchRequest.includesPropertyValues = false
+        
+        
+      //  let privateMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+      //  privateMOC.parentContext = self.modelcontroller.managedObjectContext
+        
+      //  privateMOC.performBlock {
+        
+        
         do {
-            if let results = try modelcontroller.managedObjectContext.executeFetchRequest(fetchRequest) as? [NSManagedObject] {
+            if let results = try self.modelcontroller.managedObjectContext.executeFetchRequest(fetchRequest) as? [NSManagedObject] {
                 for result in results {
-                    modelcontroller.managedObjectContext.deleteObject(result)
+                    self.modelcontroller.managedObjectContext.deleteObject(result)
                 }
                 
-                try modelcontroller.managedObjectContext.save()
+                try self.modelcontroller.managedObjectContext.save()
             }
         } catch {
             
@@ -1181,8 +1291,9 @@ class GameScene: SKScene {
             }
 
             
-           
+            
         }
+        //}
     }
     
     
@@ -1194,19 +1305,22 @@ class GameScene: SKScene {
       
         
       
-        
+        if isShowNextGameLogo{
+            return
+        }
      
+      
         
+        
+        
+  
+ 
         do{
-        
-
-
-        
         for i in 9...89 {
             
             
             let sudoku_restore : Sudoku_restore =  NSEntityDescription.insertNewObjectForEntityForName("Sudoku_restore", inManagedObjectContext: self.modelcontroller.managedObjectContext) as! Sudoku_restore
-            let node = children[i] as! SudokuBoxSKNode
+            let node = self.children[i] as! SudokuBoxSKNode
             let editable  = node.userData!["editable"] as! NSNumber
             let correctnum = node.userData!["correctnum"] as! NSNumber
             let fillednum  = node.userData!["fillednum"] as! NSNumber
@@ -1218,7 +1332,7 @@ class GameScene: SKScene {
             sudoku_restore.pos = (i - 9) as NSNumber
             }
 
-          try modelcontroller.managedObjectContext.save()
+          try self.modelcontroller.managedObjectContext.save()
         }catch {
             
             if (Runtime.isDebug()){
@@ -1229,14 +1343,23 @@ class GameScene: SKScene {
             
             
             
-        }
+        
         
         if (Runtime.isDebug()){
             
             
             print ( "Finished save current table")
+                    }
+        
         }
+        
+        
+        
+        
+           AppDelegate.writePreference("lastselectedbox",userData!["selectedbox"] as! Int)
+        
     }
+        
     
     
     
@@ -1307,9 +1430,11 @@ class GameScene: SKScene {
                     }
                 }
                 
-                userData!["numarray"] = numarray;
-                userData!["fillingarray"] = fillingarray;
+                userData!["numarray"] = numarray
+                userData!["fillingarray"] = fillingarray
                 
+                userData!["selectedbox"] =  preference["lastselectedbox"]
+                (children[userData!["selectedbox"] as! Int] as! SudokuBoxSKNode).setSelected()
              
                 
                 
@@ -1353,7 +1478,7 @@ class GameScene: SKScene {
     //MARK: - Refreshing
 
     func refreshHint(){
-        self.setAllShowhint(performance["auto_hint"] as! Bool)
+        self.setAllShowhint(preference["auto_hint"] as! Bool)
         self.updatehint()
     }
     
@@ -1362,7 +1487,7 @@ class GameScene: SKScene {
     
     func buildupcachetable(){
       
-            let second : Double = 5
+            let second : Double = 10
         
            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(second * Double(NSEC_PER_SEC)))
             dispatch_after(time, self.concurrencySudokuBackGroundQueue){
@@ -1375,7 +1500,7 @@ class GameScene: SKScene {
 
                     
                     let level =  self.preferenceleveltolevel(i)
-                    self.buildsudokutable(true,level,3)
+                    self.buildsudokutable(true,level,Double(3 * (i + 1)))
                   //  }
                     
                 }
@@ -1383,10 +1508,10 @@ class GameScene: SKScene {
                 
                 // Build Next Level Cache
                 
-                self.buildsudokutable(true,self.level+1)
+                //self.buildsudokutable(true,self.level+1,3)
                 
                 // Build This Level Cache
-                self.buildsudokutable(true,self.level+1)
+                //self.buildsudokutable(true,self.level+1,3)
                 
 
                 
@@ -1476,7 +1601,7 @@ class GameScene: SKScene {
         
         
         
-    //  let level = 3 + (performance["selectedgamelevel"] as! Int) * 3
+    //  let level = 3 + (preference["selectedgamelevel"] as! Int) * 3
             // numarray = Array(count:9,repeatedValue: Array(count:9,repeatedValue:0))
         
       //  var  fillingarray :[[Int]] = userData!["fillingarray"] as! Array
@@ -1509,7 +1634,7 @@ class GameScene: SKScene {
             let bigrect = CGRectMake(gapoffsetx + (CGFloat (i*3) * stepX),  self.frame.maxY - gapoffsety - ( CGFloat (j*3) * stepY )-stepY*3, stepX*3, stepY*3)
             let drawpath = CGPathCreateWithRoundedRect(bigrect, offset, offset, nil)
             let bigshapenode = SKShapeNode(path: drawpath)
-            bigshapenode.fillColor = SKColor.grayColor()
+            bigshapenode.fillColor = GameScene.bigframecolor
             self.addChild(bigshapenode)
             
                 }
@@ -1573,7 +1698,12 @@ class GameScene: SKScene {
     
     
     override func willMoveFromView(view: SKView) {
+       
+            
+        
+        
         savecurrenttable()
+        
        
     }
     
@@ -1691,17 +1821,23 @@ class GameScene: SKScene {
     func startNextGame(){
         if isShowNextGame {
         
+            if self.childNodeWithName("nextgame")!.hasActions(){
+                return
+            }
+            
+            self.isClosingNextGame = true
+            self._isShowNextGame = false
             
             let fadeoutAction = SKAction.fadeOutWithDuration(1.5)
             let runaction = SKAction.runBlock(){
-                 self.isClosingNextGame = false
+                
             }
             let removeAction = SKAction.removeFromParent()
             let seqAction : [SKAction] = [fadeoutAction,runaction,removeAction]
             
             let action = SKAction.sequence(seqAction)
             
-            if (performance["increase_level"] as! Bool){
+            if (preference["increase_level"] as! Bool){
             if !selectedlevelchangenexttime {
      
                 if level < GameScene.MAXLEVEL  {
@@ -1732,8 +1868,7 @@ class GameScene: SKScene {
             
         
             
-                self.isClosingNextGame = true
-                 self._isShowNextGame = false
+    
             
             
             newsudoku()
@@ -1813,7 +1948,13 @@ class GameScene: SKScene {
                     
                 }
 
-            
+        
+        
+        
+        if userData!["selectedbox"] as! Int == -1{
+                return
+        }
+        
             
         
 
@@ -1867,9 +2008,13 @@ class GameScene: SKScene {
         }
       
         var selected = 49
-        var stage = 0
+        var step = 0
+        var stepcount = 0
+        var turn = 0
         while (!(children[selected] as! SudokuBoxSKNode).isEditable()){
-            switch stage % 4{
+            
+            switch turn {
+        
             case 0:
                 ++selected
             case 1:
@@ -1879,10 +2024,24 @@ class GameScene: SKScene {
             
             case 3:
                 selected -= 9
+               
             default:
                 break
             }
-            ++stage
+            
+            if (stepcount == step){
+                stepcount = 0
+                ++turn
+                if turn == 4 {
+                    turn = 0
+                }
+                if turn  == 2 {
+                    ++step
+                }
+            }else{
+                ++stepcount
+            }
+            
             
         }
         
@@ -2162,7 +2321,9 @@ class GameScene: SKScene {
     
     
 
-       // MARK: -
+       // MARK: - Menu and Checking 
+    
+   
     
     func updateselectedbox(previous: Int){
         (children[previous] as! SudokuBoxSKNode).setDeselected()
@@ -2189,7 +2350,19 @@ class GameScene: SKScene {
     }
     
     
-    
+    func hintonlyselector(sender: NSMenuItem){
+        let selected = userData!["selectedbox"] as! Int
+        
+        if (selected == -1){
+            return
+        }
+        
+        let node = children[selected] as! SudokuBoxSKNode
+        
+        node.updatehint(true)
+        
+
+    }
     
      func autocheckcorrect(sender: NSButton) {
         
@@ -2197,7 +2370,7 @@ class GameScene: SKScene {
         
         if (sender.state == NSOnState){
             //sender.state = NSOnState
-              performance["auto_check"] = true
+              preference["auto_check"] = true
             AppDelegate.writePreference("auto_check", true)
             changecolor = true
            // checkallboxcorrect()
@@ -2205,7 +2378,7 @@ class GameScene: SKScene {
             
         }else{
        // sender.state = NSOffState
-             performance["auto_check"] = false
+             preference["auto_check"] = false
              AppDelegate.writePreference("auto_check", false)
             
          
@@ -2219,7 +2392,7 @@ class GameScene: SKScene {
 
         
         if (Runtime.isDebug()){
-            print ( "select all input check  @ GameScene" + String (performance["auto_check"]) )
+            print ( "select all input check  @ GameScene" + String (preference["auto_check"]) )
         }
         
         
@@ -2246,7 +2419,7 @@ class GameScene: SKScene {
         
             
         if node.checkcorrect(){
-             (node.children[0].children[0] as! SKLabelNode).fontColor = node.editCorrectColor
+             (node.children[0].children[0] as! SKLabelNode).fontColor = GameScene.editCorrectColor
         }
         
         let second : Double = 5
@@ -2257,7 +2430,7 @@ class GameScene: SKScene {
             if node.correctChangeColor {
                 return
             }
-            (node.children[0].children[0] as! SKLabelNode).fontColor = node.editInCorrectColor
+            (node.children[0].children[0] as! SKLabelNode).fontColor = GameScene.editInCorrectColor
                 
          
 
@@ -2281,20 +2454,20 @@ class GameScene: SKScene {
         }
         if (sender.state == NSOnState){
          //   sender.state = NSOnState
-            performance["auto_hint"] = true
+            preference["auto_hint"] = true
             //userData!["showhint"] = true
             self.setAllShowhint(true)
             
         }else{
          //   sender.state = NSOffState
-           performance["auto_hint"] = false
+           preference["auto_hint"] = false
 
             // userData!["showhint"] = false
               self.setAllShowhint(false)
         }
     
     
-     AppDelegate.writePreference("auto_hint", performance["auto_hint"]!)
+     AppDelegate.writePreference("auto_hint", preference["auto_hint"]!)
   
     updatehint()
     }
@@ -2311,7 +2484,7 @@ class GameScene: SKScene {
     
     func updateAllAutoCheck(){
         
-        let check = performance["auto_check"] as! Bool
+        let check = preference["auto_check"] as! Bool
         
         for i in 9...89 {
             let node = self.children[i] as! SudokuBoxSKNode
@@ -2342,10 +2515,66 @@ class GameScene: SKScene {
     }
     
     /*
-    func writeperformance(key: String,_ value:CFPropertyList){
+    func writepreference(key: String,_ value:CFPropertyList){
      CFPreferencesSetAppValue(key, value,kCFPreferencesCurrentApplication)
       CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication)
     }*/
+    
+    
+    
+    
+    
+    func pushcolorchange(key: String){
+        
+        
+        switch (key){
+        
+       
+        case "non_edit":
+            fallthrough
+ 
+        case "edit_correct":
+            fallthrough
+        case "edit_incorrect":
+            fallthrough
+        case "stroke":
+            fallthrough
+        case "hint_num":
+            for i in 9...89 {
+                
+               let node = children[i] as! SudokuBoxSKNode
+                node.updatecolor(key)
+            }
+            
+
+        case "big_frame":
+            for i in 0...8 {
+            let bigshapenode = children[i] as! SKShapeNode
+            bigshapenode.fillColor = GameScene.bigframecolor
+               
+            }
+       
+            
+        case "edit_stroke":
+            
+            let selected = userData!["selectedbox"] as! Int
+            if selected == -1 {
+                return
+            }
+            let node = children[selected] as! SudokuBoxSKNode
+            node.setSelected()
+            
+        default:
+            break
+            
+            
+            
+            
+        }
+        
+    
+        
+    }
 
 }
 

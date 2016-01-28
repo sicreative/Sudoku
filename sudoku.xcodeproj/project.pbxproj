@@ -50,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		612BBA101C4FF143003BCD11 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainMenu.strings"; sourceTree = "<group>"; };
-		612BBA141C4FF4F5003BCD11 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		614F6CB91C4B9B2800810CE8 /* Sudoku_restore+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sudoku_restore+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		614F6CBA1C4B9B2800810CE8 /* Sudoku_restore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sudoku_restore.swift; sourceTree = "<group>"; };
 		614F92F51C3D843900E098E9 /* CoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreController.swift; sourceTree = "<group>"; };
@@ -73,6 +72,7 @@
 		61795BDA1C36D04500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		61795BDC1C36D0FD00DF6C96 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "sudoku/zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		61795BDE1C36D10500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = sudoku/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		61B408661C53FA8700049521 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		61BF05BB1C4035880087C9AC /* Sudoku_card+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Sudoku_card+CoreDataProperties.swift"; path = "../Sudoku_card+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61BF05BC1C4035880087C9AC /* Sudoku_card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sudoku_card.swift; path = ../Sudoku_card.swift; sourceTree = "<group>"; };
 		61CB4FCF1C39B246008ECC43 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -368,7 +368,7 @@
 			children = (
 				6175B9861C25F1B6007A40C9 /* Base */,
 				612BBA101C4FF143003BCD11 /* zh-Hant */,
-				612BBA141C4FF4F5003BCD11 /* en */,
+				61B408661C53FA8700049521 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";

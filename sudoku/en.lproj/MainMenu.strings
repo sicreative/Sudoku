@@ -59,6 +59,9 @@
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "537"; */
 "537.title" = "Minimize";
 
+/* Class = "NSTextFieldCell"; title = "Hint Number"; ObjectID = "0Wz-qI-qCp"; */
+"0Wz-qI-qCp.title" = "Hint Number";
+
 /* Class = "NSButtonCell"; title = "Show All Hint"; ObjectID = "854-4P-UgG"; */
 "854-4P-UgG.title" = "Show All Hint";
 
@@ -77,6 +80,18 @@
 /* Class = "NSMenuItem"; title = "Level"; ObjectID = "DuT-i1-kOC"; */
 "DuT-i1-kOC.title" = "Level";
 
+/* Class = "NSButtonCell"; title = "Default"; ObjectID = "EdM-Hv-fnK"; */
+"EdM-Hv-fnK.title" = "Default";
+
+/* Class = "NSMenuItem"; title = "Hint"; ObjectID = "H1t-hp-q1y"; */
+"H1t-hp-q1y.title" = "Hint";
+
+/* Class = "NSTextFieldCell"; title = "Non editable Number"; ObjectID = "JJn-vw-GHS"; */
+"JJn-vw-GHS.title" = "Non editable Number";
+
+/* Class = "NSTextFieldCell"; title = "Incorrect Number"; ObjectID = "KUs-lJ-EuN"; */
+"KUs-lJ-EuN.title" = "Incorrect Number";
+
 /* Class = "NSMenuItem"; title = "Very Easy"; ObjectID = "LAo-iv-5Ed"; */
 "LAo-iv-5Ed.title" = "Very Easy";
 
@@ -88,6 +103,9 @@
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "NdH-0Z-cjr"; */
 "NdH-0Z-cjr.title" = "Edit";
+
+/* Class = "NSTextFieldCell"; title = "Selected Frame"; ObjectID = "R12-q3-RZD"; */
+"R12-q3-RZD.title" = "Selected Frame";
 
 /* Class = "NSMenuItem"; title = "Redo"; ObjectID = "Rv7-yQ-f0w"; */
 "Rv7-yQ-f0w.title" = "Redo";
@@ -104,8 +122,11 @@
 /* Class = "NSMenu"; title = "Check"; ObjectID = "X9N-Ht-a0U"; */
 "X9N-Ht-a0U.title" = "Check";
 
-/* Class = "NSMenuItem"; title = "Show Hint"; ObjectID = "Znc-l9-hxP"; */
-"Znc-l9-hxP.title" = "Show Hint";
+/* Class = "NSTextFieldCell"; title = "Small Frame"; ObjectID = "ZyM-5n-ARI"; */
+"ZyM-5n-ARI.title" = "Small Frame";
+
+/* Class = "NSTextFieldCell"; title = "Color"; ObjectID = "aOj-03-ToQ"; */
+"aOj-03-ToQ.title" = "Color";
 
 /* Class = "NSMenuItem"; title = "Undo"; ObjectID = "aVv-kd-F9b"; */
 "aVv-kd-F9b.title" = "Undo";
@@ -116,17 +137,8 @@
 /* Class = "NSMenuItem"; title = "Medium"; ObjectID = "fkj-jN-G1M"; */
 "fkj-jN-G1M.title" = "Medium";
 
-/* Class = "NSMenu"; title = "Auto"; ObjectID = "i6j-aV-l8t"; */
-"i6j-aV-l8t.title" = "Auto";
-
 /* Class = "NSButtonCell"; title = "Increase Difficultly"; ObjectID = "i8Z-tL-ZXu"; */
 "i8Z-tL-ZXu.title" = "Increase Difficultly";
-
-/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "mlz-2c-Je8"; */
-"mlz-2c-Je8.title" = "Auto";
-
-/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "mmg-n9-MDS"; */
-"mmg-n9-MDS.title" = "Check Correct";
 
 /* Class = "NSButtonCell"; title = "New Game"; ObjectID = "mwH-ki-x6j"; */
 "mwH-ki-x6j.title" = "New Game";
@@ -140,14 +152,20 @@
 /* Class = "NSMenuItem"; title = "Hard"; ObjectID = "qRs-tR-dQ8"; */
 "qRs-tR-dQ8.title" = "Hard";
 
+/* Class = "NSTextFieldCell"; title = "Correct Number"; ObjectID = "s3R-4k-f1h"; */
+"s3R-4k-f1h.title" = "Correct Number";
+
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "sFc-ak-deX"; */
 "sFc-ak-deX.title" = "Preferences";
 
 /* Class = "NSMenu"; title = "Game"; ObjectID = "u7q-Y0-DYQ"; */
 "u7q-Y0-DYQ.title" = "Game";
 
+/* Class = "NSTextFieldCell"; title = "Big Frame"; ObjectID = "vY0-YF-eGO"; */
+"vY0-YF-eGO.title" = "Big Frame";
+
 /* Class = "NSMenuItem"; title = "Very Hard"; ObjectID = "wZ2-QP-Hjq"; */
 "wZ2-QP-Hjq.title" = "Very Hard";
 
-/* Class = "NSMenuItem"; title = "Check Correct"; ObjectID = "yvK-HQ-PiB"; */
-"yvK-HQ-PiB.title" = "Check Correct";
+/* Class = "NSMenuItem"; title = "Correct"; ObjectID = "yvK-HQ-PiB"; */
+"yvK-HQ-PiB.title" = "Correct";
