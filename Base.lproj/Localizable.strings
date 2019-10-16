@@ -1,3 +1,4 @@
 /* Menu Undo Text */
 "undochangetext" = " Column：％d Row：%d ";
 "nextgametext" = " Next Game ";
+"buildgametext" = "Building Game";

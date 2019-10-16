@@ -5,7 +5,7 @@
 //  Created by slee on 2015/12/27.
 //  Copyright © 2015年 slee. All rights reserved.
 //
-
+import Cocoa
 import SpriteKit
 
 
@@ -17,6 +17,9 @@ class SudokuBoxSKNode: SKNode {
 // let editInCorrectColor = SKColor.blueColor()
 // let strokeColor  = NSColor(red:0.8,green:0.1,blue:0.1,alpha:0.8)
  var correctChangeColor = false;
+    
+    var hintpoints = [CGPoint]();
+
     
   
     
@@ -44,15 +47,15 @@ class SudokuBoxSKNode: SKNode {
    
  
     
-    func setNumValue (num:Int,_ edit:Bool){
+    func setNumValue (_ num:Int,_ edit:Bool){
         self.setNumValue(num, edit,true)
     }
 
-     func setNumValue (num:Int,_ edit:Bool,_ updatehint:Bool){
+     func setNumValue (_ num:Int,_ edit:Bool,_ updatehint:Bool){
         self.setNumValue(num, edit,updatehint,0)
     }
     
-    func setNumValue (num:Int,_ edit:Bool,_ updatehint:Bool,_ fillednum: Int){
+    func setNumValue (_ num:Int,_ edit:Bool,_ updatehint:Bool,_ fillednum: Int){
         
          let lablenode = self.children[0].children[0] as! SKLabelNode
         
@@ -98,11 +101,11 @@ class SudokuBoxSKNode: SKNode {
     
     
 
-    func BuildupBox (rect:CGRect,_ num:Int,_ id:Int,_ edit:Bool){
+    func BuildupBox (_ rect:CGRect,_ num:Int,_ id:Int,_ edit:Bool){
         let shapenode = SKShapeNode()
         let lablenode = SKLabelNode()
         
-        self.userInteractionEnabled = true;
+        self.isUserInteractionEnabled = true;
         userData = ["id": id]
         //userData = ["selectedbox":  -1]
 
@@ -115,11 +118,15 @@ class SudokuBoxSKNode: SKNode {
         
         //let rect = gamescene.frame;
         
-        let drawpath = CGPathCreateMutable()
-        let drawrect = CGRectMake(-(rect.width)/2+10, -(rect.height)/2+10, (rect.width)-20, (rect.height)-20)
+        let drawpath = CGMutablePath()
+        let drawrect = CGRect(x: -(rect.width)/2+10, y: -(rect.height)/2+10, width: (rect.width)-20, height: (rect.height)-20)
         
-        CGPathAddRect(drawpath, nil, drawrect)
-        CGPathCloseSubpath(drawpath)
+      
+        
+        drawpath.addRect(drawrect)
+        
+      //  CGPathAddRect(drawpath, nilpointer, drawrect)
+        drawpath.closeSubpath()
         
        
         lablenode.fontName = "Chalkduster"
@@ -146,7 +153,7 @@ class SudokuBoxSKNode: SKNode {
         }*/
         
         
-        lablenode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        lablenode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         
         //CGPathAddLineToPoint(drawpath,nil,-100,-100);
         
@@ -155,10 +162,10 @@ class SudokuBoxSKNode: SKNode {
         shapenode.strokeColor = GameScene.strokeColor
        // shapenode.fillColor = noneditColor
         shapenode.lineWidth = 10
-        shapenode.lineJoin = CGLineJoin.Round
+        shapenode.lineJoin = CGLineJoin.round
         
         
-       shapenode.position = CGPointMake(CGRectGetMidX(rect),CGRectGetMidY(rect))
+       shapenode.position = CGPoint(x: rect.midX,y: rect.midY)
         
         self.addChild(shapenode)
          shapenode.addChild(lablenode)
@@ -172,12 +179,58 @@ class SudokuBoxSKNode: SKNode {
         // shapenode.runAction(action)
     
        updatetextfadeIn()
+        
+        
+        
+        var shiftinc: Int = 0;
+        
+        for _ in 0...9{
+            
+            
+            
+            var labelpos = CGPoint(x: -30, y: 8)
+            
+            
+            if (shiftinc == 1 ){
+                
+                labelpos.y -= 15
+                
+            }else if (shiftinc == 3){
+                labelpos.y -= 30
+            }
+            else if(shiftinc == 2  ){
+                
+                
+                labelpos.x +=   15
+                
+            }else if (shiftinc >= 7){
+                labelpos.x +=  CGFloat (4) * 15
+                labelpos.y -= CGFloat (shiftinc - 6) * 15
+            }
+                
+                
+            else if (shiftinc >= 4){
+                
+                labelpos.x +=  CGFloat (shiftinc - 2) * 15
+                
+            }
+            
+            
+            hintpoints.append(labelpos)
+            
+            shiftinc += 1
+            
+            //self.children[0].addChild(hintlablenode)
+            
+        }
+        
+
     }
     
     
     
    
-    override func mouseDown(theEvent: NSEvent) {
+    override func mouseDown(with theEvent: NSEvent) {
         
         if ((scene! as! GameScene).isShowNextGameLogo){
             return
@@ -218,7 +271,7 @@ class SudokuBoxSKNode: SKNode {
     
     
     
-    func undochangetext(num : Int){
+    func undochangetext(_ num : Int){
         
         
         
@@ -230,15 +283,20 @@ class SudokuBoxSKNode: SKNode {
         
         let id = (userData!["id"] as! Int) - 9
         
+        let last = self.userData?["fillednum"] as! Int
         
-        (undoM.prepareWithInvocationTarget(self)).undochangetext(userData!["fillednum"] as! Int)
+        undoM.registerUndo(withTarget: self, handler: { target->Void in
+            target.undochangetext(last)
+        })
+        
+      //  ((undoM.prepare(withInvocationTarget: self)) as! SudokuBoxSKNode).undochangetext(userData!["fillednum"] as! Int)
       
         
   undoM.setActionName(String (format: NSLocalizedString("undochangetext", comment: "Menu Undo Text"),id%9+1,id/9+1))
 
         
         if (userData!["fillednum"] as! Int == 0){
-            ++(self.scene as! GameScene).numfilledBox
+            (self.scene as! GameScene).numfilledBox += 1
         }
         
         userData!["fillednum"] = num
@@ -248,7 +306,7 @@ class SudokuBoxSKNode: SKNode {
         
         if (num==0){
         node.text = ""
-            --(self.scene as! GameScene).numfilledBox
+            (self.scene as! GameScene).numfilledBox -= 1
         }else{
         node.text = String (num)
         }
@@ -259,7 +317,7 @@ class SudokuBoxSKNode: SKNode {
     }
 
     
-    func changetext(theEvent: NSEvent)->Bool{
+    func changetext(_ theEvent: NSEvent)->Bool{
         if let num = Int (theEvent.characters!) {
             if (num == 0){
                 return false
@@ -268,15 +326,24 @@ class SudokuBoxSKNode: SKNode {
             
         
            // let undo : NSUndoManager = (self.parent as! GameScene).windowWillReturnUndoManager()!
-            let undoM =        self.scene!.view!.window!.undoManager!
+            let undoM = self.scene!.view!.window!.undoManager!
             
            
             
             let id = (userData!["id"] as! Int) - 9
             
+            let last = userData!["fillednum"] as! Int
            
+            undoM.registerUndo(withTarget: self, handler: {(target)->Void in
+                target.undochangetext(last) })
             
-            (undoM.prepareWithInvocationTarget(self)).undochangetext(userData!["fillednum"] as! Int)
+          
+                
+            
+       
+         //   let l = undoM.prepare(withInvocationTarget: self)
+            
+         //       (l as! SudokuBoxSKNode).undochangetext(userData!["fillednum"] as! Int)
             undoM.setActionName(String (format: NSLocalizedString("undochangetext", comment: "Menu Undo Text"),id%9+1,id/9+1))
            
             
@@ -352,7 +419,7 @@ class SudokuBoxSKNode: SKNode {
     }
     
     
-    func correctChangeColor(isChange: Bool){
+    func correctChangeColor(_ isChange: Bool){
         if (!isEditable()){
              correctChangeColor = false
             return
@@ -420,7 +487,7 @@ class SudokuBoxSKNode: SKNode {
     }
 
     
-    func setShowhint(isShowHint :Bool){
+    func setShowhint(_ isShowHint :Bool){
         userData!["showhint"] = isShowHint
     }
     
@@ -428,45 +495,55 @@ class SudokuBoxSKNode: SKNode {
         
     }
     
+    
     func updatehint(){
-        return updatehint(true)
+        return updatehint(false)
     }
     
     
-    func updatehint(show:Bool){
+    func updatehint(_ show:Bool){
         
         
         
         
-     
+        /*
+        
         
         if self.children[0].children.count > 1 {
-            
-         
-            
-            for _ in 1...self.children[0].children.count-1{
-                self.children[0].children[1].removeFromParent()
+        
+        
+        
+        for _ in 1...self.children[0].children.count-1{
+        self.children[0].children[1].removeFromParent()
+        }
+        
+        
+        
+        }*/
+        
+       
+        
+        
+        if !show{
+            if (!isEditable() || isCorrect() || userData!["showhint"] as! Bool == false ) {
+                
+                
+                
+                
+                while children[0].children.count > 1 {
+                    children[0].children[children[0].children.count-1].removeFromParent()
+                }
+                
+                
+                return
             }
-            
-            
             
         }
         
         if (!isEditable()){
+            
             return;
         }
-        
-    
-   
-        
-        if (isCorrect() || userData!["showhint"] as! Bool == false || !show) {
-            
-            
-            return
-        }
-        
-     
-       
         
         
         let id = userData!["id"] as! Int
@@ -481,7 +558,7 @@ class SudokuBoxSKNode: SKNode {
         for i in y * 9...y*9+8{
             let node = nodegroup[i] as! SudokuBoxSKNode
             if (!node.isEditable() || node.isCorrect()){
-               
+                
                 
                 checkarray.remove(node.userData!["correctnum"] as! Int)
                 
@@ -490,10 +567,11 @@ class SudokuBoxSKNode: SKNode {
         }
         
         //insert x axis
-        for var i=9+x;i<=89;i+=9{
+        for i in stride(from:9+x, to:89, by: 9) {
+      //  for var i=9+x;i<=89;i+=9{
             let node = nodegroup[i] as! SudokuBoxSKNode
             if (!node.isEditable() || node.isCorrect()){
-                 checkarray.remove(node.userData!["correctnum"] as! Int)
+                checkarray.remove(node.userData!["correctnum"] as! Int)
             }
             
         }
@@ -515,57 +593,92 @@ class SudokuBoxSKNode: SKNode {
             }
         }
         
-       
-        let sortarray = checkarray.sort()
         
-
-        var shiftinc: Int = 0;
         
-        for i in sortarray{
         
-        let hintlablenode = SKLabelNode()
-            hintlablenode.text = String (i)
-            hintlablenode.fontName = "Futura"
-            hintlablenode.fontSize = 15
-            
-            hintlablenode.fontColor = GameScene.hintcolor
+        let sortarray = checkarray.sorted()
         
-             var labelpos = CGPointMake(-30, 8)
+        
+        
+        
+        //        var shiftinc: Int = 0;
+        
+        
+        for i in 0...sortarray.count{
             
             
-            if (shiftinc == 1 ){
+            if i < sortarray.count  {
                 
-                labelpos.y -= 15
-               
-            }else if (shiftinc == 3){
-                labelpos.y -= 30
-            }
-            else if(shiftinc == 2  ){
-             
+                if (i < children[0].children.count-1){
+                    (children[0].children[i+1] as! SKLabelNode).text = String(sortarray[i])
+                }else{
+                    let hintlablenode = SKLabelNode()
+                    hintlablenode.text = String (sortarray[i])
+                    hintlablenode.fontName = "Futura"
+                    hintlablenode.fontSize = 15
                     
-                    labelpos.x +=   15
+                    hintlablenode.fontColor = GameScene.hintcolor
+                    
+                    hintlablenode.position = hintpoints[i]
+                    self.children[0].addChild(hintlablenode)
+                    
+                }
                 
-            }else if (shiftinc >= 7){
-                labelpos.x +=  CGFloat (4) * 15
-                labelpos.y -= CGFloat (shiftinc - 6) * 15
+            }else{
+                while (  i < children[0].children.count-1){
+                    
+                    children[0].children[children[0].children.count-1].removeFromParent()
+                }
             }
-                
-            
-            else if (shiftinc >= 4){
-            
-                labelpos.x +=  CGFloat (shiftinc - 2) * 15
-               
-            }
-            
-                hintlablenode.position = labelpos
-            
-            ++shiftinc
-            
-            self.children[0].addChild(hintlablenode)
-
         }
         
-    
+        
+        /*
+        
+        let hintlablenode = SKLabelNode()
+        hintlablenode.text = String (i)
+        hintlablenode.fontName = "Futura"
+        hintlablenode.fontSize = 15
+        
+        hintlablenode.fontColor = GameScene.hintcolor
+        
+        var labelpos = CGPointMake(-30, 8)
+        
+        
+        if (shiftinc == 1 ){
+        
+        labelpos.y -= 15
+        
+        }else if (shiftinc == 3){
+        labelpos.y -= 30
+        }
+        else if(shiftinc == 2  ){
+        
+        
+        labelpos.x +=   15
+        
+        }else if (shiftinc >= 7){
+        labelpos.x +=  CGFloat (4) * 15
+        labelpos.y -= CGFloat (shiftinc - 6) * 15
+        }
+        
+        
+        else if (shiftinc >= 4){
+        
+        labelpos.x +=  CGFloat (shiftinc - 2) * 15
+        
+        }
+        
+        hintlablenode.position = labelpos
+        
+        ++shiftinc
+        
+        self.children[0].addChild(hintlablenode)
+        
+        }*/
+        
+        
+        
         if self.children[0].children[0].hasActions() {
             if self.children[0].children.count <= 1 {
                 return
@@ -574,12 +687,13 @@ class SudokuBoxSKNode: SKNode {
                 let node = self.children[0].children[i]
                 
                 
-                node.alpha = 0
+                
                 if node.hasActions(){
                     return
                     //node.removeAllActions()
                 }
-                self.children[0].children[i].runAction(SKAction.fadeInWithDuration(1.2))
+                self.children[0].children[i].run(SKAction.fadeAlpha(to: node.alpha, duration: 1.2))
+                node.alpha = 0
             }
         }
         
@@ -590,16 +704,17 @@ class SudokuBoxSKNode: SKNode {
          let node = self.children[0].children[0]
         
         
-        node.alpha = 0
+     //   node.alpha = 0
       if node.hasActions(){
             return
             //node.removeAllActions()
         }
-        node.runAction(SKAction.fadeInWithDuration(1.2))
+        node.run(SKAction.fadeAlpha(to: node.alpha, duration: 1.2))
+        node.alpha = 0
         }
     
     
-    func updatecolor(key: String){
+    func updatecolor(_ key: String){
         switch (key){
             
             

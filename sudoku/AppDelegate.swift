@@ -62,7 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 
   
-    @IBAction func newsudoku(sender: NSMenuItem) {
+    @IBAction func newsudoku(_ sender: NSMenuItem) {
         
         
         if (skView!.scene as! GameScene).isShowNextGameLogo{
@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                (self.skView!.scene as! GameScene ).newsudoku();
     }
     
-    @IBAction func LevelSelect(sender: NSMenuItem) {
+    @IBAction func LevelSelect(_ sender: NSMenuItem) {
         
        
         
@@ -112,51 +112,51 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func setLevelMenu(select : Int){
+    func setLevelMenu(_ select : Int){
         
         
        
-            menuveryeasy.state = NSOffState
+        menuveryeasy.state = NSControl.StateValue.off
        
-            menueasy.state =  NSOffState
-            menumed.state =  NSOffState
-            menuhard.state =  NSOffState
-            menuveryhard.state =  NSOffState
+            menueasy.state =  NSControl.StateValue.off
+            menumed.state =  NSControl.StateValue.off
+            menuhard.state =  NSControl.StateValue.off
+            menuveryhard.state =  NSControl.StateValue.off
 
   
         
         switch (menuselectedlevel){
         case 0:
-            menuveryeasy.state = NSOffState
+            menuveryeasy.state = NSControl.StateValue.off
         case 1:
-            menueasy.state =  NSOffState
+            menueasy.state =  NSControl.StateValue.off
         case 2:
-            menumed.state =  NSOffState
+            menumed.state =  NSControl.StateValue.off
         case 3:
-            menuhard.state =  NSOffState
+            menuhard.state =  NSControl.StateValue.off
         case 4:
-            menuveryhard.state =  NSOffState
+            menuveryhard.state =  NSControl.StateValue.off
         default:
             break
             
         }
     }
     
-    func LevelChange(isNewGame: Bool){
+    func LevelChange(_ isNewGame: Bool){
         
-        let state = isNewGame ? NSOffState : NSMixedState
+        let state = isNewGame ? NSControl.StateValue.off : NSControl.StateValue.mixed
         
         
     
-            menuveryeasy.state = NSOffState
+            menuveryeasy.state = NSControl.StateValue.off
         
-            menueasy.state =  NSOffState
+            menueasy.state =  NSControl.StateValue.off
       
-            menumed.state =  NSOffState
+            menumed.state =  NSControl.StateValue.off
         
-            menuhard.state =  NSOffState
+            menuhard.state =  NSControl.StateValue.off
        
-            menuveryhard.state =  NSOffState
+            menuveryhard.state =  NSControl.StateValue.off
     
     
 
@@ -164,8 +164,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
         
         
-        if (menuveryeasy.state != NSMixedState && menueasy.state != NSMixedState &&  menumed.state != NSMixedState
-            && menuhard.state != NSMixedState && menuveryhard.state != NSMixedState){
+        if (menuveryeasy.state != NSControl.StateValue.mixed && menueasy.state != NSControl.StateValue.mixed &&  menumed.state != NSControl.StateValue.mixed
+            && menuhard.state != NSControl.StateValue.mixed && menuveryhard.state != NSControl.StateValue.mixed){
        
         switch (menuselectedlevel){
         case 0:
@@ -192,15 +192,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         switch (menuchooselevel){
         case 0:
-            menuveryeasy.state = NSOnState
+            menuveryeasy.state = NSControl.StateValue.on
         case 1:
-            menueasy.state = NSOnState
+            menueasy.state = NSControl.StateValue.on
         case 2:
-            menumed.state = NSOnState
+            menumed.state = NSControl.StateValue.on
         case 3:
-            menuhard.state = NSOnState
+            menuhard.state = NSControl.StateValue.on
         case 4:
-            menuveryhard.state = NSOnState
+            menuveryhard.state = NSControl.StateValue.on
         default:
             break
             
@@ -210,8 +210,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menuselectedlevel = menuchooselevel
         
         
-        AppDelegate.writePreference("selectedgamelevel",menuselectedlevel)
-        (skView!.scene as! GameScene).preference["selectedgamelevel"] = menuselectedlevel
+        AppDelegate.writePreference("selectedgamelevel",menuselectedlevel as CFPropertyList)
+        (skView!.scene as! GameScene).preference["selectedgamelevel"] = menuselectedlevel as AnyObject
         
         (self.skView!.scene as! GameScene).levelresettopreference()
 
@@ -226,32 +226,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func ResetLevlMenu(selected : Int){
+    func ResetLevlMenu(_ selected : Int){
         
-        menuveryeasy.state = NSOffState
-        menueasy.state =  NSOffState
-        menumed.state =  NSOffState
-        menuhard.state =  NSOffState
-        menuveryhard.state =  NSOffState
+        menuveryeasy.state = NSControl.StateValue.off
+        menueasy.state =  NSControl.StateValue.off
+        menumed.state =  NSControl.StateValue.off
+        menuhard.state =  NSControl.StateValue.off
+        menuveryhard.state =  NSControl.StateValue.off
         
         
         switch (selected){
         case 0:
-            menuveryeasy.state = NSOnState
+            menuveryeasy.state = NSControl.StateValue.on
         case 1:
-            menueasy.state = NSOnState
+            menueasy.state = NSControl.StateValue.on
         case 2:
-            menumed.state = NSOnState
+            menumed.state = NSControl.StateValue.on
         case 3:
-            menuhard.state = NSOnState
+            menuhard.state = NSControl.StateValue.on
         case 4:
-            menuveryhard.state = NSOnState
+            menuveryhard.state = NSControl.StateValue.on
         default:
             break
             
         }
-        AppDelegate.writePreference("selectedgamelevel",selected)
-        (skView!.scene as! GameScene).preference["selectedgamelevel"] = selected
+        AppDelegate.writePreference("selectedgamelevel",selected as CFPropertyList)
+        (skView!.scene as! GameScene).preference["selectedgamelevel"] = selected as AnyObject
 
         
         
@@ -272,11 +272,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     //MARK: - Action Response 
     
     
-    @IBAction func hint(sender: NSMenuItem) {
+    @IBAction func hint(_ sender: NSMenuItem) {
     (self.skView!.scene as! GameScene ).hintonlyselector(sender)
     }
     
-    @IBAction func checkcorrectonlyselect(sender: NSMenuItem) {
+    @IBAction func checkcorrectonlyselect(_ sender: NSMenuItem) {
         if (Runtime.isDebug()){
            print ( "select check only this  @ AppDelegate ")
         }
@@ -295,14 +295,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 */
     
     
-    @IBAction func incDiff(sender: NSButton) {
+    @IBAction func incDiff(_ sender: NSButton) {
         let pref = "increase_level"
-        let value = (sender.state == NSOnState) ? true : false
-        (skView!.scene as! GameScene).preference[pref] = value
-        AppDelegate.writePreference(pref,value)
+        let value = (sender.state == NSControl.StateValue.on) ? true : false
+        (skView!.scene as! GameScene).preference[pref] = value as AnyObject
+        AppDelegate.writePreference(pref,value as CFPropertyList)
     }
 
-    @IBAction func autoCorrect(sender: NSButton) {
+    @IBAction func autoCorrect(_ sender: NSButton) {
         if (Runtime.isDebug()){
             print ( "select all input check  @ AppDelegate ")
         }
@@ -311,7 +311,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     
-    @IBAction func autoHint(sender: NSButton) {
+    @IBAction func autoHint(_ sender: NSButton) {
         
         if (Runtime.isDebug()){
             print ( "select hint @ AppDelegate ")
@@ -320,18 +320,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     
-    @IBAction func showDialogselectlevel(sender: NSButton) {
+    @IBAction func showDialogselectlevel(_ sender: NSButton) {
         let pref = "show_select_level_dialog"
-        let value = (sender.state == NSOnState) ? true : false
-        (skView!.scene as! GameScene).preference[pref] = value
-        AppDelegate.writePreference(pref,value)
+        let value = (sender.state == NSControl.StateValue.on) ? true : false
+        (skView!.scene as! GameScene).preference[pref] = value as AnyObject
+        AppDelegate.writePreference(pref,value as CFPropertyList)
         
-        showDialognexttime.state = Int(value)
+        showDialognexttime.state = (value==true ? NSControl.StateValue.on : NSControl.StateValue.off)
 
     }
     
     
-    @IBAction func newGamedialogshowchange(sender: NSButton) {
+    @IBAction func newGamedialogshowchange(_ sender: NSButton) {
         showDialogselectlevel(sender)
         pref_showselectleveldialog.state = sender.state
     }
@@ -347,13 +347,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
   
-    @IBAction func ColorChange(sender: NSColorWell) {
+    @IBAction func ColorChange(_ sender: NSColorWell) {
        setColorValueandChange(AppDelegate.ColorTagToKey(sender.tag),sender.color )
         colorchanged = true
     }
+
+    
+    @IBAction func LinkToPage(_ sender: Any) {
+        if let url = URL(string: "https://sitechprog.blogspot.hk"), NSWorkspace.shared.open(url) {
+            
+        }
+    }
     
     
-    @IBAction func ColorChangeDefault(sender: AnyObject) {
+    @IBAction func ColorChangeDefault(_ sender: AnyObject) {
         
         
         
@@ -368,12 +375,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     
-    @IBAction func changeLevelNewGameButton(sender: NSButtonCell) {
+    @IBAction func changeLevelNewGameButton(_ sender: NSButtonCell) {
         
         let pref = "newgamestarimmediately"
         let value = true
-        (skView!.scene as! GameScene).preference[pref] = value
-        AppDelegate.writePreference(pref,value)
+        (skView!.scene as! GameScene).preference[pref] = value as AnyObject
+        AppDelegate.writePreference(pref,value as CFPropertyList)
         
         changeLevelSheet.sheetParent!.endSheet(changeLevelSheet)
         
@@ -382,11 +389,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    @IBAction func changeLevelnextgamebutton(sender: NSButtonCell) {
+    @IBAction func changeLevelnextgamebutton(_ sender: NSButtonCell) {
         let pref = "newgamestarimmediately"
         let value = false
-        (skView!.scene as! GameScene).preference[pref] = value
-        AppDelegate.writePreference(pref,value)
+        (skView!.scene as! GameScene).preference[pref] = value as AnyObject
+        AppDelegate.writePreference(pref,value as CFPropertyList)
         
         changeLevelSheet.sheetParent!.endSheet(changeLevelSheet)
         LevelChange(false)
@@ -395,7 +402,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     func endSheet(
-        returnCode: NSModalResponse) {
+        _ returnCode: NSApplication.ModalResponse) {
 
             
     
@@ -405,7 +412,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
   // MARK: - Color Preference
     
-    func setPreferenceValue(key: String,_ color: SKColor){
+    func setPreferenceValue(_ key: String,_ color: SKColor){
     
         
         switch (key){
@@ -437,7 +444,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 
     
-    static func ColorTagToKey(tag: Int)->String{
+    static func ColorTagToKey(_ tag: Int)->String{
         
         
         switch (tag){
@@ -467,14 +474,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
 
-    private func setColor(inout set: SKColor,_ value: SKColor){
+    fileprivate func setColor(_ set: inout SKColor,_ value: SKColor){
         let scolor  = CIColor(color: set)
         let vcolor = CIColor(color: value)
         set = SKColor(red: vcolor!.red,green: vcolor!.green,blue: vcolor!.blue,alpha: scolor!.alpha)
         
     }
     
-    func setColorValue(key: String,_ color: SKColor){
+    func setColorValue(_ key: String,_ color: SKColor){
         
         
         switch (key){
@@ -504,14 +511,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     
-    func setColorValueandChange(key:String,_ color:SKColor){
+    func setColorValueandChange(_ key:String,_ color:SKColor){
         setColorValue(key, color)
          (skView!.scene as! GameScene).pushcolorchange(key)
     }
     
     
     
-    func setPreferanceColor(dict: CFDictionaryRef){
+    func setPreferanceColor(_ dict: CFDictionary){
        // let d =  CFDictionaryGetValue(dict, "color").memory as! CFDictionary
         //let d : NSDictionary = dict
         
@@ -529,7 +536,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     }
     
-    private  func setPreferanceColor(dict: CFDictionaryRef, _ key: String){
+    fileprivate  func setPreferanceColor(_ dict: CFDictionary, _ key: String){
         let nsdict :NSDictionary  = dict
         let data = nsdict[key] as! CFData
         let color = AppDelegate.getcolorvalue(data)
@@ -538,14 +545,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     }
     
-    private static func getcolorvalue(data : CFData)->SKColor{
+    fileprivate static func getcolorvalue(_ data : CFData)->SKColor{
     
       
-        let ndata: NSData = data
+        let ndata: Data = data as Data
         
         
-        var u : [UInt8] = Array(count: 4, repeatedValue: 0)
-        ndata.getBytes(&u, length: sizeof(UInt8) * 4)
+        var u : [UInt8] = Array(repeating: 0, count: 4)
+        (ndata as NSData).getBytes(&u, length: MemoryLayout<UInt8>.size * 4)
         
     //let u = CFDataGetBytePtr( CFDictionaryGetValue(dict, key).memory as! CFData)
         return SKColor (red: CGFloat (Double(u[0]) / 255.0)
@@ -559,15 +566,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 
 
-    static func ColorPreference()->CFDictionaryRef{
-        let returnvalue : CFDictionary = ["edit_stroke":ColorToData(GameScene.editingStrokeColor),
+    static func ColorPreference()->CFDictionary{
+        let returnvalue : Dictionary = ["edit_stroke":ColorToData(GameScene.editingStrokeColor),
                                             "non_edit":ColorToData(GameScene.noneditColor),
                                             "edit_correct":ColorToData(GameScene.editCorrectColor),
                                              "edit_incorrect":ColorToData(GameScene.editInCorrectColor),
                                                  "stroke":ColorToData(GameScene.strokeColor),
                                              "big_frame":ColorToData(GameScene.bigframecolor),
                                              "hint_num":ColorToData(GameScene.hintcolor)]
-    return returnvalue
+    return returnvalue as CFDictionary
     
     }
     
@@ -575,7 +582,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 
 
-    static func ColorToData(color : SKColor)->CFData{
+    static func ColorToData(_ color : SKColor)->CFData{
         
         
         //var colors = color
@@ -598,7 +605,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       //  var b_uInt8 = UInt8(Int(ciColor.blue * 255.0))
       //   var a_uInt8 = UInt8(Int(ciColor.alpha * 255.0))
       
-        let data : CFDataRef = CFDataCreate(nil, rgb_u,sizeof(UInt8)*4)
+        let data : CFData = CFDataCreate(nil, rgb_u,MemoryLayout<UInt8>.size*4)
         
         
         
@@ -647,7 +654,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // MARK: - Life Cycle
     
-    func preferenceWillClose(aNotification: NSNotification){
+    @objc func preferenceWillClose(_ aNotification: Notification){
         print("Preference Windows Closed")
         if (colorchanged){
             savecolorpreference()
@@ -656,34 +663,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         /* Pick a size for the scene */
         if let scene = GameScene(fileNamed:"GameScene") {
             
   
-            
+               UserDefaults.standard.set(false, forKey: "NSFullScreenMenuItemEverywhere")
             
             var preference = [String:AnyObject]()
            // preferencesetup
             
         
           
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "preferenceWillClose:", name: NSWindowWillCloseNotification, object: self.preference)
+            NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.preferenceWillClose(_:)), name: NSWindow.willCloseNotification, object: self.preference)
 
-              preference["lastselectedbox"] = preferencessetup("lastselectedbox", -1) as! Int
-            preference["selectedgamelevel"] = preferencessetup("selectedgamelevel", 0) as! Int
-            preference["auto_hint"] = preferencessetup("auto_hint", false) as! Bool
-            preference["auto_check"] = preferencessetup("auto_check", false) as! Bool
-            preference["increase_level"] = preferencessetup("increase_level", true) as! Bool
-            preference["show_select_level_dialog"] = preferencessetup("show_select_level_dialog", true) as! Bool
-             preference["newgamestarimmediately"] = preferencessetup("show_select_level_dialog", true) as! Bool
-            preference["level"] = preferencessetup("level", GameScene.MINLEVEL) as! Int
+              preference["lastselectedbox"] = preferencessetup("lastselectedbox", -1 as CFPropertyList) as! Int as AnyObject
+            preference["selectedgamelevel"] = preferencessetup("selectedgamelevel", 0 as CFPropertyList) as! Int as AnyObject
+            preference["auto_hint"] = preferencessetup("auto_hint", false as CFPropertyList) as! Bool as AnyObject
+            preference["auto_check"] = preferencessetup("auto_check", false as CFPropertyList) as! Bool as AnyObject
+            preference["increase_level"] = preferencessetup("increase_level", true as CFPropertyList) as! Bool as AnyObject
+            preference["show_select_level_dialog"] = preferencessetup("show_select_level_dialog", true as CFPropertyList) as! Bool as AnyObject
+             preference["newgamestarimmediately"] = preferencessetup("show_select_level_dialog", true as CFPropertyList) as! Bool as AnyObject
+            preference["level"] = preferencessetup("level", GameScene.MINLEVEL as CFPropertyList) as! Int as AnyObject
 
     //    ["default_color"] = AppDelegate.ColorPreference()
 
          preference["color"] = preferencessetup("color", defaultcolor)
             
-            setPreferanceColor(preference["color"] as! CFDictionaryRef)
+            setPreferanceColor(preference["color"] as! CFDictionary)
            
             
             
@@ -692,9 +699,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
            // CFPreferencesSetAppValue("IncorrectColor", "SKColor.Blue",kCFPreferencesCurrentApplication)
       
+            self.skView!.allowsTransparency = false
+           
+            
             /* Set the scale mode to scale to fit the window */
-            scene.scaleMode = .AspectFit
-            scene.backgroundColor = SKColor.whiteColor()
+            scene.scaleMode = .aspectFit
+           // scene.backgroundColor = .clear
+           scene.backgroundColor = NSColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
             
             scene.preference = preference
 
@@ -708,38 +719,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
           //  scene.size = CGSize(width:800.0,height:600.0);
             
+            
+     
             self.skView!.presentScene(scene)
+            
             
             
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             self.skView!.ignoresSiblingOrder = true
-            
+           
+            if (Runtime.isDebug()){
             self.skView!.showsFPS = true
             self.skView!.showsNodeCount = true
+            }
             
             
             
             switch (menuselectedlevel){
             case 0:
-                menuveryeasy.state = NSOnState
+                menuveryeasy.state = NSControl.StateValue.on
             case 1:
-                menueasy.state = NSOnState
+                menueasy.state = NSControl.StateValue.on
             case 2:
-                menumed.state = NSOnState
+                menumed.state = NSControl.StateValue.on
             case 3:
-                menuhard.state = NSOnState
+                menuhard.state = NSControl.StateValue.on
             case 4:
-                menuveryhard.state = NSOnState
+                menuveryhard.state = NSControl.StateValue.on
             default:
                 break
                 
             }
             
-            pref_autocheck.state = preference["auto_check"] as! Bool ? NSOnState : NSOffState
-            pref_showhint.state = preference["auto_hint"] as! Bool ? NSOnState : NSOffState
-            pref_increaseDiff.state = preference["increase_level"] as! Bool ? NSOnState : NSOffState
-            pref_showselectleveldialog.state = preference["show_select_level_dialog"] as! Bool ? NSOnState : NSOffState
+            pref_autocheck.state = preference["auto_check"] as! Bool ? NSControl.StateValue.on : NSControl.StateValue.off
+            pref_showhint.state = preference["auto_hint"] as! Bool ? NSControl.StateValue.on : NSControl.StateValue.off
+            pref_increaseDiff.state = preference["increase_level"] as! Bool ? NSControl.StateValue.on : NSControl.StateValue.off
+            pref_showselectleveldialog.state = preference["show_select_level_dialog"] as! Bool ? NSControl.StateValue.on : NSControl.StateValue.off
 
             
      
@@ -764,12 +780,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         
         return true
     }
     
-    func applicationWillTerminate(notification: NSNotification) {
+    func applicationWillTerminate(_ notification: Notification) {
         (self.skView.scene! as! GameScene).savecurrenttable()
         
     }
@@ -779,8 +795,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 // MARK - Preference
     
     
-    static func writePreference(key: String,_ value:CFPropertyList){
-        CFPreferencesSetAppValue(key, value,kCFPreferencesCurrentApplication)
+    static func writePreference(_ key: String,_ value:CFPropertyList){
+        CFPreferencesSetAppValue(key as CFString, value,kCFPreferencesCurrentApplication)
         CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication)
         
     }
@@ -788,10 +804,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func preferencessetup(key: String,_ defaultvalue: CFPropertyList )->CFPropertyList{
+    func preferencessetup(_ key: String,_ defaultvalue: CFPropertyList )->CFPropertyList{
         
         
-        let property:CFPropertyList! =  CFPreferencesCopyAppValue(key, kCFPreferencesCurrentApplication)
+        let property:CFPropertyList! =  CFPreferencesCopyAppValue(key as CFString, kCFPreferencesCurrentApplication)
         
         
         
@@ -813,7 +829,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             
             
-            CFPreferencesSetAppValue(key, defaultvalue,kCFPreferencesCurrentApplication)
+            CFPreferencesSetAppValue(key as CFString, defaultvalue,kCFPreferencesCurrentApplication)
             return defaultvalue
         }
         

@@ -14,38 +14,38 @@ class CoreController: NSObject {
     
     override init() {
         // This resource is the same name as your xcdatamodeld contained in your project.
-        guard let modelURL = NSBundle.mainBundle().URLForResource("Model", withExtension:"momd") else {
+        guard let modelURL = Bundle.main.url(forResource: "Model", withExtension:"momd") else {
             fatalError("Error loading model from bundle")
         }
         // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
-        guard let mom = NSManagedObjectModel(contentsOfURL: modelURL) else {
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
             fatalError("Error initializing mom from: \(modelURL)")
         }
         
         
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         self.managedObjectContext.persistentStoreCoordinator = psc
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+        DispatchQueue.global(qos:.background).async {
           //  var path : NSSearchPathDirectory = .CachesDirectory + "/" + NSBundle.mainBundle().bundleIdentifier
             
             
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+            let urls = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
             let cacheURL = urls[urls.endIndex-1]
-            let appcacheURL = cacheURL.URLByAppendingPathComponent( NSBundle.mainBundle().bundleIdentifier!,isDirectory: true)
+            let appcacheURL = cacheURL.appendingPathComponent( Bundle.main.bundleIdentifier!,isDirectory: true)
 
             
             
     
 
             
-            let storeURL = appcacheURL.URLByAppendingPathComponent( "Cache.db")
+            let storeURL = appcacheURL.appendingPathComponent( "Cache.db")
       
             
             
             
             do{
-                try  NSFileManager.defaultManager().createDirectoryAtURL(appcacheURL, withIntermediateDirectories: false, attributes: nil)
+                try  FileManager.default.createDirectory(at: appcacheURL, withIntermediateDirectories: false, attributes: nil)
                 
             }catch{
               //  fatalError("Error build directory: \(error)")
@@ -55,16 +55,16 @@ class CoreController: NSObject {
             
            
             do {
-                try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+                try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
             }
             
             catch {
                 do{
               
-                try NSFileManager.defaultManager().removeItemAtURL(appcacheURL)
-                try  NSFileManager.defaultManager().createDirectoryAtURL(appcacheURL, withIntermediateDirectories: false, attributes: nil)
+                try FileManager.default.removeItem(at: appcacheURL)
+                try  FileManager.default.createDirectory(at: appcacheURL, withIntermediateDirectories: false, attributes: nil)
                     do {
-                try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+                try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
                     }catch{
                         fatalError("Error migrating store: \(error)")
                     }

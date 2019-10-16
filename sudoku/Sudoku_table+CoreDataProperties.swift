@@ -14,7 +14,7 @@ import CoreData
 
 extension Sudoku_table {
 
-    @NSManaged var table: NSDate?
+    @NSManaged var table: Date?
     @NSManaged var card: NSSet?
     @NSManaged var level: NSNumber?
 

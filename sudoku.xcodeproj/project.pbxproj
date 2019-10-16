@@ -49,11 +49,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		612BBA101C4FF143003BCD11 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainMenu.strings"; sourceTree = "<group>"; };
 		614F6CB91C4B9B2800810CE8 /* Sudoku_restore+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sudoku_restore+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		614F6CBA1C4B9B2800810CE8 /* Sudoku_restore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sudoku_restore.swift; sourceTree = "<group>"; };
 		614F92F51C3D843900E098E9 /* CoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreController.swift; sourceTree = "<group>"; };
 		615CE0F11C2EF8620012029A /* SudokuBoxSKNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuBoxSKNode.swift; sourceTree = "<group>"; };
+		615E0A9E1EE97A3A00278173 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = sudoku/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		615E0AA01EE97A3A00278173 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
+		615E0AA11EE97A3A00278173 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		615E0AA21EE97A3B00278173 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		615E0AA61EE9906400278173 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		615E0AA81EE991D300278173 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainMenu.strings"; sourceTree = "<group>"; };
 		616303231C30868200DA230C /* sudoku-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "sudoku-Bridging-Header.h"; sourceTree = "<group>"; };
 		616303241C30868200DA230C /* Runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runtime.h; sourceTree = "<group>"; };
 		616303251C30868200DA230C /* Runtime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runtime.m; sourceTree = "<group>"; };
@@ -72,7 +77,6 @@
 		61795BDA1C36D04500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		61795BDC1C36D0FD00DF6C96 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "sudoku/zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		61795BDE1C36D10500DF6C96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = sudoku/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		61B408661C53FA8700049521 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		61BF05BB1C4035880087C9AC /* Sudoku_card+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Sudoku_card+CoreDataProperties.swift"; path = "../Sudoku_card+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61BF05BC1C4035880087C9AC /* Sudoku_card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sudoku_card.swift; path = ../Sudoku_card.swift; sourceTree = "<group>"; };
 		61CB4FCF1C39B246008ECC43 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -242,30 +246,39 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = slee;
 				TargetAttributes = {
 					6175B9791C25F1B6007A40C9 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7698T37TAB;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
 					};
 					6175B98C1C25F1B6007A40C9 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7698T37TAB;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 6175B9791C25F1B6007A40C9;
 					};
 					6175B9971C25F1B6007A40C9 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7698T37TAB;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 6175B9791C25F1B6007A40C9;
 					};
 				};
 			};
 			buildConfigurationList = 6175B9751C25F1B6007A40C9 /* Build configuration list for PBXProject "Sudoku" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				"zh-Hant",
+				en,
 			);
 			mainGroup = 6175B9711C25F1B6007A40C9;
 			productRefGroup = 6175B97B1C25F1B6007A40C9 /* Products */;
@@ -367,8 +380,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				6175B9861C25F1B6007A40C9 /* Base */,
-				612BBA101C4FF143003BCD11 /* zh-Hant */,
-				61B408661C53FA8700049521 /* en */,
+				615E0AA61EE9906400278173 /* en */,
+				615E0AA81EE991D300278173 /* zh-Hant */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -377,6 +390,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				61795BDA1C36D04500DF6C96 /* Base */,
+				615E0AA01EE97A3A00278173 /* en */,
 			);
 			name = Info.plist;
 			sourceTree = "<group>";
@@ -386,6 +400,7 @@
 			children = (
 				61795BDC1C36D0FD00DF6C96 /* zh-Hant */,
 				61795BDE1C36D10500DF6C96 /* Base */,
+				615E0A9E1EE97A3A00278173 /* en */,
 			);
 			name = InfoPlist.strings;
 			path = ..;
@@ -395,6 +410,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				61CD72DE1C4D1BDC00B37C41 /* zh-Hant */,
+				615E0AA11EE97A3A00278173 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -403,6 +419,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				61CD72E31C4D1BDC00B37C41 /* zh-Hant */,
+				615E0AA21EE97A3B00278173 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -423,17 +440,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_OPTIMIZATION_PROFILE_FILE = "";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -455,7 +484,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -467,17 +496,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_OPTIMIZATION_PROFILE_FILE = "";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -493,9 +534,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -504,13 +546,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7698T37TAB;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = sudoku/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudoku;
 				PRODUCT_NAME = Sudoku;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "sudoku/sudoku-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -519,12 +568,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7698T37TAB;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = sudoku/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudoku;
 				PRODUCT_NAME = Sudoku;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "sudoku/sudoku-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -532,13 +588,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7698T37TAB;
 				INFOPLIST_FILE = sudokuTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudokuTests;
 				PRODUCT_NAME = Sudoku.temp_caseinsensitive_rename;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sudoku.temp_caseinsensitive_rename.app/Contents/MacOS/Sudoku.temp_caseinsensitive_rename";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sudoku.app/Contents/MacOS/Sudoku";
 			};
 			name = Debug;
 		};
@@ -546,24 +606,32 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7698T37TAB;
 				INFOPLIST_FILE = sudokuTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudokuTests;
 				PRODUCT_NAME = Sudoku.temp_caseinsensitive_rename;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sudoku.temp_caseinsensitive_rename.app/Contents/MacOS/Sudoku.temp_caseinsensitive_rename";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sudoku.app/Contents/MacOS/Sudoku";
 			};
 			name = Release;
 		};
 		6175B9A81C25F1B6007A40C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7698T37TAB;
 				INFOPLIST_FILE = sudokuUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudokuUITests;
 				PRODUCT_NAME = Sudoku.temp_caseinsensitive_rename;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = sudoku;
 				USES_XCTRUNNER = YES;
 			};
@@ -572,11 +640,15 @@
 		6175B9A91C25F1B6007A40C9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7698T37TAB;
 				INFOPLIST_FILE = sudokuUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = slee.sudokuUITests;
 				PRODUCT_NAME = Sudoku.temp_caseinsensitive_rename;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = sudoku;
 				USES_XCTRUNNER = YES;
 			};

@@ -1,3 +1,13 @@
+
+
+
+/* Class = "NSMenuItem"; title = "Visit WebSite"; ObjectID = "dUH-gd-W85"; */
+"dUH-gd-W85.title" = "參觀網頁";
+
+
+
+
+
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "5"; */
 "5.title" = "將此程式所有視窗移到最前";
 
@@ -74,10 +84,10 @@
 "LpP-UH-XH1.title" = "易";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "NdH-0Z-cjr"; */
-"NdH-0Z-cjr.title" = "Edit";
+"NdH-0Z-cjr.title" = "編輯 ";
 
 /* Class = "NSMenuItem"; title = "Redo"; ObjectID = "Rv7-yQ-f0w"; */
-"Rv7-yQ-f0w.title" = "Redo";
+"Rv7-yQ-f0w.title" = "重做";
 
 /* Class = "NSTextFieldCell"; title = "Start New Game or Start on Next"; ObjectID = "SyA-3o-sEE"; */
 "SyA-3o-sEE.title" = "開新遊戲或下一次才生效";
@@ -95,10 +105,10 @@
 "Znc-l9-hxP.title" = "提示";
 
 /* Class = "NSMenuItem"; title = "Undo"; ObjectID = "aVv-kd-F9b"; */
-"aVv-kd-F9b.title" = "Undo";
+"aVv-kd-F9b.title" = "還原";
 
 /* Class = "NSWindow"; title = "NewGameSheets"; ObjectID = "fB7-fr-5RV"; */
-"fB7-fr-5RV.title" = "New Game Sheets";
+"fB7-fr-5RV.title" = "新遊戲";
 
 /* Class = "NSMenuItem"; title = "Medium"; ObjectID = "fkj-jN-G1M"; */
 "fkj-jN-G1M.title" = "中";
@@ -136,22 +146,88 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "sFc-ak-deX"; */
 "sFc-ak-deX.title" = "偏好設定";
 
+
+
+
+
+
+
+/* Class = "NSTextFieldCell"; title = "Hint Number"; ObjectID = ""; */
+"0Wz-qI-qCp.title" = "提示數字";
+
 /* Class = "NSButtonCell"; title = "Show All Hint"; ObjectID = "854-4P-UgG"; */
-"854-4P-UgG.title" = "Show All Hint";
+"854-4P-UgG.title" = "顯示全部提示";
 
 /* Class = "NSButtonCell"; title = "Show Next Time"; ObjectID = "8X7-gX-8eV"; */
-"8X7-gX-8eV.title" = "Show Next Time";
+"8X7-gX-8eV.title" = "下一次顯示";
 
 /* Class = "NSButtonCell"; title = "Show Dialog for Select Level"; ObjectID = "CBT-gR-kMv"; */
-"CBT-gR-kMv.title" = "Show Dialog for Select Level";
+"CBT-gR-kMv.title" = "選擇等級時顯示對話框";
 
-/* Class = "NSTextFieldCell"; title = "Start New Game or Start on Next"; ObjectID = "SyA-3o-sEE"; */
-"SyA-3o-sEE.title" = "Start New Game or Start on Next";
-
-/* Class = "NSButtonCell"; title = "Increase Difficultly"; ObjectID = "i8Z-tL-ZXu"; */
-"i8Z-tL-ZXu.title" = "Increase Difficultly";
 
 /* Class = "NSButtonCell"; title = "Auto Check Correct"; ObjectID = "De4-lV-gP9"; */
-"De4-lV-gP9.title" = "Auto Check Correct";
+"De4-lV-gP9.title" = "自動顯示正確";
 
+
+/* Class = "NSButtonCell"; title = "Default"; ObjectID = "EdM-Hv-fnK"; */
+"EdM-Hv-fnK.title" = "預設值";
+
+/* Class = "NSMenuItem"; title = "Hint"; ObjectID = "H1t-hp-q1y"; */
+"H1t-hp-q1y.title" = "提示";
+
+/* Class = "NSTextFieldCell"; title = "Non editable Number"; ObjectID = "JJn-vw-GHS"; */
+"JJn-vw-GHS.title" = "不能選取數字";
+
+/* Class = "NSTextFieldCell"; title = "Incorrect Number"; ObjectID = "KUs-lJ-EuN"; */
+"KUs-lJ-EuN.title" = "不正確數字";
+
+/* Class = "NSMenuItem"; title = "Very Easy"; ObjectID = "LAo-iv-5Ed"; */
+"LAo-iv-5Ed.title" = "非常易";
+
+
+
+
+
+/* Class = "NSTextFieldCell"; title = "Selected Frame"; ObjectID = "R12-q3-RZD"; */
+"R12-q3-RZD.title" = "己選框";
+
+
+
+
+
+
+
+
+
+/* Class = "NSTextFieldCell"; title = "Small Frame"; ObjectID = "ZyM-5n-ARI"; */
+"ZyM-5n-ARI.title" = "小邊框";
+
+/* Class = "NSTextFieldCell"; title = "Color"; ObjectID = "aOj-03-ToQ"; */
+"aOj-03-ToQ.title" = "顏色";
+
+
+
+
+
+/* Class = "NSButtonCell"; title = "Increase Difficultly"; ObjectID = "i8Z-tL-ZXu"; */
+"i8Z-tL-ZXu.title" = "增加難度";
+
+
+
+
+
+/* Class = "NSTextFieldCell"; title = "Correct Number"; ObjectID = "s3R-4k-f1h"; */
+"s3R-4k-f1h.title" = "正確數字";
+
+
+
+
+
+/* Class = "NSTextFieldCell"; title = "Big Frame"; ObjectID = "vY0-YF-eGO"; */
+"vY0-YF-eGO.title" = "大邊框";
+
+
+
+/* Class = "NSMenuItem"; title = "Correct"; ObjectID = "yvK-HQ-PiB"; */
+"yvK-HQ-PiB.title" = "正確";
 
